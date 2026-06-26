@@ -497,8 +497,6 @@
       .calendar-box {
         min-height: 400px;
         margin-bottom: 64px;
-        display: grid;
-        place-items: center;
         border: 1px solid var(--border);
         background: var(--secondary);
       }
@@ -506,6 +504,27 @@
       .calendar-box div {
         text-align: center;
         color: var(--muted-soft);
+      }
+
+      .calendar-box iframe {
+        width: 100%;
+        min-height: 520px;
+        display: block;
+        border: 0;
+        background: var(--secondary);
+      }
+
+      .calendar-fallback {
+        padding: 18px 24px;
+        text-align: center;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .calendar-fallback a {
+        color: var(--primary);
+        border-bottom: 1px solid currentColor;
       }
 
       .steps {
@@ -1055,10 +1074,15 @@
           </div>
 
           <div class="calendar-box">
-            <div>
-              <div style="font-size: 44px; margin-bottom: 16px;">□</div>
-              <p>TimeTree 日曆嵌入區域</p>
-              <p style="font-size: 14px;">請在此嵌入您的 TimeTree 日曆</p>
+            <iframe
+              src="https://timetreeapp.com/calendars/aoJ6iE6uVPUh"
+              title="彡禾悅訂房日曆"
+              loading="lazy"
+            ></iframe>
+            <div class="calendar-fallback">
+              若日曆無法正常顯示，請
+              <a href="https://timetreeapp.com/calendars/aoJ6iE6uVPUh" target="_blank" rel="noopener noreferrer">開啟 TimeTree 訂房日曆</a>
+              查看空房。
             </div>
           </div>
 
