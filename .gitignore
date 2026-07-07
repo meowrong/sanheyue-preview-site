@@ -34,3 +34,4 @@ github-upload-parts/
 
 # local logs
 *.log
+.codex-static-server.cjs

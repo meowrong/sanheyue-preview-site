@@ -79,12 +79,14 @@
       }
 
       .nav-inner {
+        position: relative;
+        min-height: 74px;
         max-width: none;
         margin: 0 auto;
         padding: 20px 26px;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        justify-content: space-between;
         gap: 32px;
       }
 
@@ -93,16 +95,79 @@
       }
 
       .nav-brand {
-        font-size: 20px;
-        letter-spacing: 0.12em;
+        display: grid;
+        gap: 6px;
+        justify-items: center;
         color: rgba(255, 248, 236, 0.92);
+        text-align: center;
         transition: color 260ms ease;
       }
 
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 0;
+      .nav-brand-main {
+        font-size: 22px;
+        letter-spacing: 0.18em;
+      }
+
+      .nav-brand-sub {
+        font-size: 10px;
+        letter-spacing: 0.34em;
+      }
+
+      .nav-menu-button {
+        width: 44px;
+        height: 44px;
+        display: inline-grid;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 248, 236, 0.92);
+        cursor: pointer;
+        transition: color 260ms ease;
+      }
+
+      .nav-menu-button span,
+      .nav-menu-button::before,
+      .nav-menu-button::after {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 1px;
+        background: currentColor;
+      }
+
+      .nav-menu-button span {
+        margin: 6px 0;
+      }
+
+      .nav-menu-button-lines {
+        display: grid;
+      }
+
+      .nav-menu-panel {
+        position: absolute;
+        left: 26px;
+        top: calc(100% + 10px);
+        min-width: 180px;
+        display: grid;
+        gap: 14px;
+        padding: 18px 20px;
+        background: rgba(255, 255, 255, 0.94);
+        color: var(--foreground);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition:
+          opacity 200ms ease,
+          transform 200ms ease;
+      }
+
+      .nav-menu-button:hover + .nav-menu-panel,
+      .nav-menu-button:focus + .nav-menu-panel,
+      .nav-menu-panel:hover,
+      .nav-menu-panel:focus-within {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
       }
 
       .nav a {
@@ -112,20 +177,9 @@
         transition: color 240ms ease;
       }
 
-      .nav-links a {
-        position: relative;
-        padding: 0 18px;
-      }
-
-      .nav-links a:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        top: 50%;
-        width: 1px;
-        height: 14px;
-        background: rgba(255, 248, 236, 0.42);
-        transform: translateY(-50%);
+      .nav-menu-panel a {
+        color: rgba(38, 56, 59, 0.74);
+        letter-spacing: 0.16em;
       }
 
       .nav a:hover {
@@ -136,19 +190,21 @@
         color: var(--foreground);
       }
 
+      .nav.is-scrolled .nav-menu-button {
+        color: var(--foreground);
+      }
+
       .nav.is-scrolled a {
         color: rgba(38, 56, 59, 0.72);
       }
 
-      .nav.is-scrolled a:hover {
+      .nav.is-scrolled a:hover,
+      .nav-menu-panel a:hover {
         color: var(--foreground);
       }
 
-      .nav.is-scrolled .nav-links a:not(:last-child)::after {
-        background: rgba(38, 56, 59, 0.28);
-      }
-
       .nav-cta {
+        justify-self: end;
         border: 1px solid rgba(255, 248, 236, 0.72);
         border-radius: 0;
         padding: 13px 28px;
@@ -178,40 +234,6 @@
         color: #ffffff;
       }
 
-      .lang-toggle {
-        border: 1px solid rgba(255, 248, 236, 0.72);
-        border-radius: 0;
-        padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.08);
-        color: rgba(255, 248, 236, 0.92);
-        font-family: inherit;
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        cursor: pointer;
-        transition:
-          background 240ms ease,
-          border-color 240ms ease,
-          color 240ms ease;
-      }
-
-      .lang-toggle:hover {
-        border-color: #ffffff;
-        background: rgba(255, 255, 255, 0.18);
-        color: #ffffff;
-      }
-
-      .nav.is-scrolled .lang-toggle {
-        border-color: rgba(38, 56, 59, 0.32);
-        background: transparent;
-        color: var(--foreground);
-      }
-
-      .nav.is-scrolled .lang-toggle:hover {
-        border-color: var(--foreground);
-        background: transparent;
-        color: var(--foreground);
-      }
-
       main {
         width: min(1240px, calc(100% - 40px));
         margin: 20px auto;
@@ -226,185 +248,78 @@
       }
 
       .hero-title {
+        --hero-parallax-y: 0px;
         min-height: 760px;
         display: grid;
-        grid-template-columns: 130px 1fr 130px;
-        align-items: center;
+        grid-template-columns: 1fr;
+        align-items: end;
         position: relative;
         overflow: hidden;
         text-align: center;
         margin: 0;
-        padding: 176px 52px 92px;
+        padding: 176px 52px 58px;
         color: var(--surface);
         background:
-          linear-gradient(90deg, rgba(26, 48, 53, 0.62), rgba(26, 48, 53, 0.2) 45%, rgba(26, 48, 53, 0.34)),
-          url("public/images/sanheyue-exterior-front.jpeg") center / cover;
+          linear-gradient(
+            180deg,
+            rgba(18, 31, 34, 0.46) 0%,
+            rgba(18, 31, 34, 0.12) 26%,
+            rgba(18, 31, 34, 0.04) 56%,
+            rgba(18, 31, 34, 0.42) 100%
+          ),
+          url("public/images/hero.3.png") center calc(50% + var(--hero-parallax-y)) / cover;
       }
 
-      .hero-copy {
+      .hero-footer {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        grid-column: 2;
-        max-width: 820px;
+        width: min(780px, 100%);
         margin: 0 auto;
         padding: 0;
       }
 
-      .hero-copy h1 {
-        margin: 0 0 28px;
-        font-size: clamp(46px, 6.8vw, 78px);
-        font-weight: 400;
-        line-height: 1.12;
-        letter-spacing: 0.2em;
-        text-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
-      }
-
-      .hero-title p,
-      .hero-copy p {
+      .hero-caption {
         margin: 0;
-        font-size: 16px;
-        letter-spacing: 0.14em;
-        color: rgba(255, 248, 236, 0.86);
-      }
-
-      .hero-subtitle {
         color: rgba(255, 248, 236, 0.86);
         font-size: 15px;
-        line-height: 2;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.24em;
       }
 
-      .hero-kicker {
-        margin: 0 0 18px;
-        color: rgba(255, 248, 236, 0.72);
-        font-size: 12px;
-        letter-spacing: 0.28em;
-      }
-
-      .hero-actions {
-        display: flex;
-        gap: 14px;
-        margin-top: 34px;
-      }
-
-      .hero-actions a {
-        min-width: 128px;
-        border: 1px solid rgba(255, 248, 236, 0.46);
-        border-radius: 6px;
-        padding: 12px 22px;
-        background: rgba(255, 248, 236, 0.86);
-        color: #26383b;
+      .hero-availability {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 148px;
+        margin-top: 22px;
+        border: 1px solid rgba(255, 248, 236, 0.62);
+        border-radius: 0;
+        padding: 13px 24px;
+        background: rgba(255, 248, 236, 0.9);
+        color: var(--foreground);
         font-size: 13px;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.16em;
+        transition:
+          background 240ms ease,
+          border-color 240ms ease,
+          color 240ms ease;
       }
 
-      .hero-actions a.primary {
-        border-color: rgba(101, 127, 131, 0.92);
-        background: var(--primary);
-        color: var(--surface);
+      .hero-availability:hover {
+        background: #fff8ec;
+        color: var(--foreground);
       }
 
       .hero-photo {
         display: none;
       }
 
-      .hero-side-menu {
-        grid-column: 1;
-        justify-self: start;
-        display: grid;
-        gap: 16px;
-        text-align: left;
-      }
-
-      .hero-side-menu a {
-        color: rgba(255, 248, 236, 0.74);
-        font-size: 10px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        transition: color 240ms ease, transform 240ms ease;
-      }
-
-      .hero-side-menu a:hover {
-        color: var(--surface);
-        transform: translateX(4px);
-      }
-
-      .hero-search {
-        position: absolute;
-        left: 50%;
-        bottom: 92px;
-        width: min(680px, calc(100% - 120px));
-        transform: translateX(-50%);
-        display: grid;
-        grid-template-columns: 1.1fr 1.5fr 0.8fr auto;
-        align-items: center;
-        gap: 1px;
-        padding: 12px;
-        background: rgba(235, 244, 243, 0.34);
-        border: 1px solid rgba(255, 248, 236, 0.26);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 22px 70px rgba(18, 36, 40, 0.24);
-      }
-
-      .hero-search span,
-      .hero-search strong {
-        display: block;
-      }
-
-      .hero-search span {
-        margin-bottom: 6px;
-        color: rgba(255, 248, 236, 0.62);
-        font-size: 10px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .hero-search strong {
-        color: var(--surface);
-        font-size: 13px;
+      .hero-info-strip {
+        margin: 20px 0 0;
+        color: rgba(255, 248, 236, 0.66);
+        font-size: 11px;
         font-weight: 400;
-        letter-spacing: 0.08em;
-      }
-
-      .hero-search a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 112px;
-        height: 40px;
-        border: 1px solid rgba(255, 248, 236, 0.56);
-        background: rgba(255, 248, 236, 0.18);
-        color: var(--surface);
-        font-size: 12px;
         letter-spacing: 0.14em;
-        transition: background 240ms ease, color 240ms ease;
-      }
-
-      .hero-search a:hover {
-        background: var(--surface);
-        color: var(--foreground);
-      }
-
-      .hero-dots {
-        position: absolute;
-        left: 50%;
-        bottom: 38px;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 9px;
-      }
-
-      .hero-dots span {
-        width: 5px;
-        height: 5px;
-        border-radius: 999px;
-        background: rgba(255, 248, 236, 0.5);
-      }
-
-      .hero-dots span:first-child {
-        background: var(--surface);
       }
 
       .image-story {
@@ -415,7 +330,7 @@
 
       .image-story.reverse {
         display: grid;
-        grid-template-columns: minmax(240px, 0.9fr) 86px minmax(320px, 1fr);
+        grid-template-columns: minmax(240px, 0.9fr) minmax(320px, 1fr);
         align-items: center;
         gap: 48px;
       }
@@ -442,7 +357,7 @@
       }
 
       .image-story.reverse .story-card {
-        grid-column: 3;
+        grid-column: 2;
         margin-left: 0;
         text-align: left;
         padding: 0;
@@ -468,19 +383,7 @@
       .image-story.reverse .story-image img {
         position: relative;
         z-index: 1;
-        aspect-ratio: 4 / 5;
         height: auto;
-        object-fit: cover;
-      }
-
-      .image-story.reverse::after {
-        content: "ABOUT US";
-        grid-column: 2;
-        justify-self: center;
-        writing-mode: vertical-rl;
-        color: rgba(38, 56, 59, 0.7);
-        font-size: 22px;
-        letter-spacing: 0.12em;
       }
 
       .story-card::before {
@@ -967,59 +870,162 @@
         line-height: 1.8;
       }
 
-      .contact-row,
-      .social-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      .footer-contact {
+        background: #45443f;
+        color: rgba(255, 255, 255, 0.86);
       }
 
-      .contact-list,
-      .social-list {
+      .footer-newsletter {
         display: grid;
-        gap: 14px;
+        grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1fr) auto;
+        align-items: center;
+        gap: 28px;
+        padding: 38px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       }
 
-      .social-link {
+      .footer-newsletter h2 {
+        margin: 0;
+        color: #f4f1ec;
+        font-size: clamp(30px, 3vw, 44px);
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .footer-newsletter input {
+        width: 100%;
+        height: 48px;
+        border: 0;
+        padding: 0 22px;
+        background: #f7f6f4;
+        color: #45443f;
+        font: inherit;
+        font-size: 14px;
+        letter-spacing: 0.04em;
+      }
+
+      .footer-newsletter button {
+        height: 52px;
+        border: 0;
+        padding: 0 34px;
+        background: #857763;
+        color: #fff;
+        font: inherit;
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .footer-directory {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 80px;
+        padding: 38px 24px 54px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .footer-kicker {
+        margin: 0 0 34px;
+        color: rgba(255, 255, 255, 0.52);
+        font-size: 13px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+      }
+
+      .footer-contact-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 48px;
+      }
+
+      .footer-contact-item span {
+        display: block;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .footer-contact-item strong,
+      .footer-contact-item a,
+      .footer-contact-item small,
+      .footer-side-links a {
+        display: block;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.8;
+      }
+
+      .footer-contact-item small {
+        margin-top: 12px;
+      }
+
+      .footer-contact-item a,
+      .footer-side-links a {
         width: fit-content;
-        transition:
-          color 260ms ease,
-          transform 260ms ease;
+        transition: color 220ms ease;
       }
 
-      .social-link:hover {
-        transform: translateX(4px);
+      .footer-contact-item a:hover,
+      .footer-side-links a:hover {
+        color: #ffffff;
       }
 
-      .social-link.ig:hover,
-      .social-link.ig:hover span {
-        color: #c13584;
-      }
-
-      .social-link.gmap:hover,
-      .social-link.gmap:hover span {
-        color: #2e7d32;
+      .footer-side-links {
+        display: grid;
+        gap: 24px;
+        align-content: start;
       }
 
       .footer-bottom {
-        border-top: 1px solid var(--border);
-        padding: 32px 24px;
-        background: var(--background);
+        background: #45443f;
+        padding: 30px 24px;
       }
 
       .footer-bottom .container {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        gap: 18px;
-        color: var(--muted-soft);
-        font-size: 12px;
+        gap: 24px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .footer-brand {
+        color: #f4f1ec;
+        font-size: 23px;
         letter-spacing: 0.08em;
       }
 
-      .footer-bottom nav {
+      .footer-social {
         display: flex;
-        gap: 32px;
+        align-items: center;
+        gap: 18px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .footer-social a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 16px;
+        letter-spacing: 0;
+      }
+
+      .footer-policy {
+        justify-self: end;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
 
       .line-button {
@@ -1290,52 +1296,41 @@
           overflow-x: auto;
         }
 
-        .nav-brand,
-        .nav-cta {
-          display: none;
+        .nav-inner {
+          grid-template-columns: auto 1fr auto;
+          gap: 14px;
+          overflow: visible;
         }
 
-        .nav-links {
-          gap: 28px;
+        .nav-brand-main {
+          font-size: 18px;
+        }
+
+        .nav-brand-sub {
+          font-size: 9px;
+          letter-spacing: 0.24em;
+        }
+
+        .nav-menu-panel {
+          left: 18px;
+        }
+
+        .nav-cta {
+          padding: 10px 14px;
+          font-size: 10px;
+          letter-spacing: 0.1em;
         }
 
         .hero-title {
+          --hero-parallax-y: 0px;
           min-height: auto;
           grid-template-columns: 1fr;
-          padding: 110px 24px 210px;
+          padding: 320px 24px 44px;
         }
 
-        .hero-copy {
-          padding: 0;
-        }
-
-        .hero-copy h1 {
-          font-size: 46px;
-        }
-
-        .hero-actions {
-          flex-wrap: wrap;
-        }
-
-        .hero-side-menu {
-          display: none;
-        }
-
-        .hero-search {
-          bottom: 70px;
-          width: calc(100% - 48px);
-          grid-template-columns: 1fr;
-          gap: 12px;
-          padding: 18px;
-          text-align: center;
-        }
-
-        .hero-search a {
-          width: 100%;
-        }
-
-        .hero-dots {
-          bottom: 30px;
+        .hero-info-strip {
+          font-size: 12px;
+          line-height: 1.9;
         }
 
         .hero-photo {
@@ -1358,14 +1353,6 @@
 
         .image-story {
           padding: 72px 28px 0;
-        }
-
-        .image-story.reverse::after {
-          display: block;
-          margin: 32px 0 0;
-          writing-mode: horizontal-tb;
-          text-align: center;
-          font-size: 14px;
         }
 
         .image-story.reverse .story-image::before {
@@ -1422,9 +1409,34 @@
           padding: 36px 28px;
         }
 
-        .footer-bottom .container,
-        .footer-bottom nav {
-          flex-direction: column;
+        .footer-newsletter,
+        .footer-directory,
+        .footer-contact-grid,
+        .footer-bottom .container {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-newsletter {
+          gap: 18px;
+          padding: 34px 24px;
+        }
+
+        .footer-newsletter button {
+          width: 100%;
+        }
+
+        .footer-directory {
+          gap: 40px;
+        }
+
+        .footer-contact-grid {
+          gap: 30px;
+        }
+
+        .footer-social,
+        .footer-policy,
+        .footer-brand {
+          justify-self: start;
         }
 
         .availability-modal {
@@ -1473,61 +1485,34 @@
   <body>
     <header class="nav">
       <nav class="nav-inner" aria-label="主導覽">
-        <a class="nav-brand" href="#home">彡禾悅</a>
-        <div class="nav-links">
-          <a href="#home">首頁</a>
-          <a href="#about">關於民宿</a>
-          <a href="#amenities">空間設備</a>
-          <a href="#rooms">客房資訊</a>
-          <a href="#booking">預約流程</a>
-          <a href="#experiences">代訂體驗</a>
-          <a href="#contact">聯繫我們</a>
+        <button class="nav-menu-button" type="button" aria-label="開啟選單">
+          <span class="nav-menu-button-lines" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu-panel">
+          <a href="#about">關於</a>
+          <a href="#amenities">空間</a>
+          <a href="#rooms">房型</a>
+          <a href="#booking">預約</a>
+          <a href="#contact">聯繫</a>
         </div>
-        <a class="nav-cta" href="#booking">立即預約</a>
-        <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
+        <a class="nav-brand" href="#home" aria-label="彡禾悅首頁">
+          <span class="nav-brand-main">彡禾悅</span>
+          <span class="nav-brand-sub">SHAN HE YUE</span>
+        </a>
+        <a class="nav-cta" href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer">LINE 詢問</a>
       </nav>
     </header>
 
     <main>
       <section id="home" class="hero">
         <div class="hero-title">
-          <div class="hero-side-menu" aria-label="快速導覽">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#rooms">Room</a>
-            <a href="#amenities">Service</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <div class="hero-copy">
-            <h1>彡禾悅</h1>
-            <p class="hero-subtitle">小琉球三合院包棟民宿</p>
-            <div class="hero-actions">
-              <a href="#rooms">查看房型</a>
-              <a href="#booking" class="primary">立即預約</a>
-            </div>
+          <div class="hero-footer">
+            <p class="hero-caption">小琉球三合院包棟民宿</p>
+            <a href="#availability" data-availability-open class="hero-availability">查詢空房</a>
+            <p class="hero-info-strip">12–16 人包棟｜4 間房｜KTV｜電動麻將｜烤肉</p>
           </div>
           <div class="hero-photo">
             <img src="public/images/sanheyue-exterior-front.jpeg" alt="彡禾悅民宿庭院外觀" />
-          </div>
-          <div class="hero-search" aria-label="預約查詢">
-            <div>
-              <span>Booking</span>
-              <strong>LINE 預約</strong>
-            </div>
-            <div>
-              <span>Stay</span>
-              <strong>包棟住宿 / 12-16 人</strong>
-            </div>
-            <div>
-              <span>Room</span>
-              <strong>4 間房</strong>
-            </div>
-            <a href="#availability" data-availability-open>Search</a>
-          </div>
-          <div class="hero-dots" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
           </div>
         </div>
 
@@ -1864,29 +1849,65 @@
               抵達小琉球後，<br />
               可依照 Google Maps 導航前往民宿。
             </p>
-            <div class="divider small-line" style="margin-left: 0;"></div>
-            <div class="contact-list">
-              <div class="contact-row"><span>☎</span><a href="tel:0919172702">0919-172-702</a></div>
-              <div class="contact-row"><span>⌖</span><span>屏東縣琉球鄉（小琉球）</span></div>
-              <div class="contact-row"><span>LINE</span><span>LINE 預約為主</span></div>
-            </div>
-            <div class="divider small-line" style="margin-left: 0;"></div>
-            <div class="social-list">
-              <a class="social-link ig" href="https://www.instagram.com/shanheyue.inn/" target="_blank" rel="noopener noreferrer"><span>Instagram</span><span>Follow us on Instagram</span></a>
-              <a class="social-link gmap" href="https://maps.app.goo.gl/tagLzZu646FLm7pb6" target="_blank" rel="noopener noreferrer"><span>Map</span><span>View on Google Maps</span></a>
-            </div>
           </div>
         </div>
 
-        <div class="footer-bottom">
-          <div class="container">
-            <p>&copy; 2026 彡禾悅 包棟民宿</p>
-            <nav>
+        <div class="footer-contact">
+          <div class="container footer-newsletter">
+            <h2>JOIN OUR FAMILY</h2>
+            <input type="email" aria-label="Email address" placeholder="TYPE YOUR EMAIL ADDRESS..." />
+            <button type="button">JOIN US</button>
+          </div>
+
+          <div class="container footer-directory">
+            <div>
+              <p class="footer-kicker">彡禾悅資訊</p>
+              <div class="footer-contact-grid">
+                <div class="footer-contact-item">
+                  <span>聯絡人</span>
+                  <strong>彡禾悅管家</strong>
+                  <a href="tel:0919172702">0919-172-702</a>
+                  <small>LINE 預約為主</small>
+                </div>
+                <div class="footer-contact-item">
+                  <span>地址</span>
+                  <strong>屏東縣琉球鄉（小琉球）</strong>
+                  <a href="https://maps.app.goo.gl/tagLzZu646FLm7pb6" target="_blank" rel="noopener noreferrer">Google Maps 導航</a>
+                </div>
+                <div class="footer-contact-item">
+                  <span>社群</span>
+                  <strong>Instagram</strong>
+                  <a href="https://www.instagram.com/shanheyue.inn/" target="_blank" rel="noopener noreferrer">@shanheyue.inn</a>
+                </div>
+                <div class="footer-contact-item">
+                  <span>網站</span>
+                  <strong>彡禾悅官方網站</strong>
+                  <a href="#home">回到首頁</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-side-links">
+              <p class="footer-kicker">快速連結</p>
               <a href="#home">首頁</a>
               <a href="#about">關於民宿</a>
-              <a href="#amenities">空間設備</a>
+              <a href="#rooms">客房資訊</a>
+              <a href="#booking">預約流程</a>
               <a href="#contact">聯繫我們</a>
-            </nav>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <div class="container">
+              <div class="footer-brand">彡禾悅</div>
+              <div class="footer-social">
+                <span>FOLLOW US</span>
+                <a href="https://www.instagram.com/shanheyue.inn/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                <a href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer" aria-label="LINE">LINE</a>
+                <a href="https://maps.app.goo.gl/tagLzZu646FLm7pb6" target="_blank" rel="noopener noreferrer" aria-label="Google Maps">MAP</a>
+              </div>
+              <a class="footer-policy" href="#rules">隱私政策</a>
+            </div>
           </div>
         </div>
       </footer>
@@ -1943,23 +1964,17 @@
           htmlLang: "zh-Hant",
           toggle: "EN",
           items: [
-            [".nav-brand", "text", "彡禾悅"],
-            [".nav-links a:nth-child(1)", "text", "首頁"],
-            [".nav-links a:nth-child(2)", "text", "關於民宿"],
-            [".nav-links a:nth-child(3)", "text", "空間設備"],
-            [".nav-links a:nth-child(4)", "text", "客房資訊"],
-            [".nav-links a:nth-child(5)", "text", "預約流程"],
-            [".nav-links a:nth-child(6)", "text", "代訂體驗"],
-            [".nav-links a:nth-child(7)", "text", "聯繫我們"],
-            [".nav-cta", "text", "立即預約"],
-            [".hero-copy h1", "text", "彡禾悅"],
-            [".hero-subtitle", "html", "小琉球三合院包棟民宿"],
-            [".hero-actions a:nth-child(1)", "text", "查看房型"],
-            [".hero-actions a:nth-child(2)", "text", "立即預約"],
-            [".hero-search div:nth-child(1) strong", "text", "LINE 預約"],
-            [".hero-search div:nth-child(2) strong", "text", "包棟住宿 / 12-16 人"],
-            [".hero-search div:nth-child(3) strong", "text", "4 間房"],
-            [".hero-search a", "text", "Search"],
+            [".nav-brand-main", "text", "彡禾悅"],
+            [".nav-brand-sub", "text", "SHAN HE YUE"],
+            [".nav-menu-panel a:nth-child(1)", "text", "關於"],
+            [".nav-menu-panel a:nth-child(2)", "text", "空間"],
+            [".nav-menu-panel a:nth-child(3)", "text", "房型"],
+            [".nav-menu-panel a:nth-child(4)", "text", "預約"],
+            [".nav-menu-panel a:nth-child(5)", "text", "聯繫"],
+            [".nav-cta", "text", "LINE 詢問"],
+            [".hero-caption", "text", "小琉球三合院包棟民宿"],
+            [".hero-availability", "text", "查詢空房"],
+            [".hero-info-strip", "text", "12–16 人包棟｜4 間房｜KTV｜電動麻將｜烤肉"],
             [".hero .image-story .story-card h2", "text", "回家的感覺，不一定是在家。"],
             [".hero .image-story .story-card p", "html", "在小琉球的三合院老宅裡，<br />和家人朋友一起慢慢生活幾天。"],
             [".testimonial:nth-child(1) h3", "text", "溫馨的三合院包棟體驗"],
@@ -2052,13 +2067,27 @@
             [".rule-card:nth-child(10) h3", "text", "有提供行李載送服務嗎？"],
             [".rule-card:nth-child(10) p", "text", "有，我們提供行李載送服務。如有需要，請於入住前提前告知，我們會協助安排。"],
             [".contact-panel > p", "html", "彡禾悅位於小琉球杉福村，<br />坐落在安靜的住宅區小巷弄裡。<br /><br />抵達小琉球後，<br />可依照 Google Maps 導航前往民宿。"],
-            [".contact-row:nth-child(2) span:last-child", "text", "屏東縣琉球鄉（小琉球）"],
-            [".contact-row:nth-child(3) span:last-child", "text", "LINE 預約為主"],
-            [".footer-bottom p", "html", "&copy; 2026 彡禾悅 包棟民宿"],
-            [".footer-bottom nav a:nth-child(1)", "text", "首頁"],
-            [".footer-bottom nav a:nth-child(2)", "text", "關於民宿"],
-            [".footer-bottom nav a:nth-child(3)", "text", "空間設備"],
-            [".footer-bottom nav a:nth-child(4)", "text", "聯繫我們"]
+            [".footer-contact-item:nth-child(1) span", "text", "聯絡人"],
+            [".footer-contact-item:nth-child(1) strong", "text", "彡禾悅管家"],
+            [".footer-contact-item:nth-child(1) small", "text", "LINE 預約為主"],
+            [".footer-contact-item:nth-child(2) span", "text", "地址"],
+            [".footer-contact-item:nth-child(2) strong", "text", "屏東縣琉球鄉（小琉球）"],
+            [".footer-contact-item:nth-child(2) a", "text", "Google Maps 導航"],
+            [".footer-contact-item:nth-child(3) span", "text", "社群"],
+            [".footer-contact-item:nth-child(3) strong", "text", "Instagram"],
+            [".footer-contact-item:nth-child(4) span", "text", "網站"],
+            [".footer-contact-item:nth-child(4) strong", "text", "彡禾悅官方網站"],
+            [".footer-contact-item:nth-child(4) a", "text", "回到首頁"],
+            [".footer-directory .footer-kicker", "text", "彡禾悅資訊"],
+            [".footer-side-links .footer-kicker", "text", "快速連結"],
+            [".footer-side-links a:nth-of-type(1)", "text", "首頁"],
+            [".footer-side-links a:nth-of-type(2)", "text", "關於民宿"],
+            [".footer-side-links a:nth-of-type(3)", "text", "客房資訊"],
+            [".footer-side-links a:nth-of-type(4)", "text", "預約流程"],
+            [".footer-side-links a:nth-of-type(5)", "text", "聯繫我們"],
+            [".footer-brand", "text", "彡禾悅"],
+            [".footer-social span", "text", "FOLLOW US"],
+            [".footer-policy", "text", "隱私政策"]
           ]
         },
         en: {
@@ -2066,23 +2095,17 @@
           htmlLang: "en",
           toggle: "中文",
           items: [
-            [".nav-brand", "text", "San He Yue"],
-            [".nav-links a:nth-child(1)", "text", "Home"],
-            [".nav-links a:nth-child(2)", "text", "About"],
-            [".nav-links a:nth-child(3)", "text", "Amenities"],
-            [".nav-links a:nth-child(4)", "text", "Rooms"],
-            [".nav-links a:nth-child(5)", "text", "Booking"],
-            [".nav-links a:nth-child(6)", "text", "Experiences"],
-            [".nav-links a:nth-child(7)", "text", "Contact"],
-            [".nav-cta", "text", "Book Now"],
-            [".hero-copy h1", "text", "San He Yue"],
-            [".hero-subtitle", "html", "A traditional courtyard private stay in Xiaoliuqiu"],
-            [".hero-actions a:nth-child(1)", "text", "View Rooms"],
-            [".hero-actions a:nth-child(2)", "text", "Book Now"],
-            [".hero-search div:nth-child(1) strong", "text", "Book via LINE"],
-            [".hero-search div:nth-child(2) strong", "text", "Private stay / 12-16 guests"],
-            [".hero-search div:nth-child(3) strong", "text", "4 rooms"],
-            [".hero-search a", "text", "Search"],
+            [".nav-brand-main", "text", "彡禾悅"],
+            [".nav-brand-sub", "text", "SHAN HE YUE"],
+            [".nav-menu-panel a:nth-child(1)", "text", "About"],
+            [".nav-menu-panel a:nth-child(2)", "text", "Spaces"],
+            [".nav-menu-panel a:nth-child(3)", "text", "Rooms"],
+            [".nav-menu-panel a:nth-child(4)", "text", "Booking"],
+            [".nav-menu-panel a:nth-child(5)", "text", "Contact"],
+            [".nav-cta", "text", "LINE"],
+            [".hero-caption", "text", "A traditional courtyard private stay in Xiaoliuqiu"],
+            [".hero-availability", "text", "Check Availability"],
+            [".hero-info-strip", "text", "Private stay for 12–16 guests｜4 rooms｜KTV｜Mahjong｜BBQ"],
             [".hero .image-story .story-card h2", "text", "The feeling of home does not always have to be at home."],
             [".hero .image-story .story-card p", "html", "In a restored courtyard house in Xiaoliuqiu,<br />spend a few slow days with family and friends."],
             [".testimonial:nth-child(1) h3", "text", "A warm private courtyard stay"],
@@ -2175,13 +2198,27 @@
             [".rule-card:nth-child(10) h3", "text", "Is luggage transfer available?"],
             [".rule-card:nth-child(10) p", "text", "Yes. Luggage transfer service is available. Please let us know before check-in so we can help arrange it."],
             [".contact-panel > p", "html", "San He Yue is located in Shanfu Village, Xiaoliuqiu,<br />tucked inside a quiet residential lane.<br /><br />After arriving in Xiaoliuqiu,<br />please follow Google Maps navigation to the guesthouse."],
-            [".contact-row:nth-child(2) span:last-child", "text", "Liuqiu Township, Pingtung County"],
-            [".contact-row:nth-child(3) span:last-child", "text", "LINE booking preferred"],
-            [".footer-bottom p", "html", "&copy; 2026 San He Yue Private Stay"],
-            [".footer-bottom nav a:nth-child(1)", "text", "Home"],
-            [".footer-bottom nav a:nth-child(2)", "text", "About"],
-            [".footer-bottom nav a:nth-child(3)", "text", "Amenities"],
-            [".footer-bottom nav a:nth-child(4)", "text", "Contact"]
+            [".footer-contact-item:nth-child(1) span", "text", "Contact"],
+            [".footer-contact-item:nth-child(1) strong", "text", "San He Yue Host"],
+            [".footer-contact-item:nth-child(1) small", "text", "LINE booking preferred"],
+            [".footer-contact-item:nth-child(2) span", "text", "Address"],
+            [".footer-contact-item:nth-child(2) strong", "text", "Liuqiu Township, Pingtung County"],
+            [".footer-contact-item:nth-child(2) a", "text", "Open Google Maps"],
+            [".footer-contact-item:nth-child(3) span", "text", "Social"],
+            [".footer-contact-item:nth-child(3) strong", "text", "Instagram"],
+            [".footer-contact-item:nth-child(4) span", "text", "Website"],
+            [".footer-contact-item:nth-child(4) strong", "text", "San He Yue Official Site"],
+            [".footer-contact-item:nth-child(4) a", "text", "Back to Home"],
+            [".footer-directory .footer-kicker", "text", "San He Yue Info"],
+            [".footer-side-links .footer-kicker", "text", "Quick Links"],
+            [".footer-side-links a:nth-of-type(1)", "text", "Home"],
+            [".footer-side-links a:nth-of-type(2)", "text", "About"],
+            [".footer-side-links a:nth-of-type(3)", "text", "Rooms"],
+            [".footer-side-links a:nth-of-type(4)", "text", "Booking"],
+            [".footer-side-links a:nth-of-type(5)", "text", "Contact"],
+            [".footer-brand", "text", "San He Yue"],
+            [".footer-social span", "text", "FOLLOW US"],
+            [".footer-policy", "text", "Privacy Policy"]
           ]
         }
       };
@@ -2190,7 +2227,8 @@
         const pack = i18n[lang] || i18n.zh;
         document.documentElement.lang = pack.htmlLang;
         document.title = pack.title;
-        document.querySelector(".lang-toggle").textContent = pack.toggle;
+        const toggleButton = document.querySelector(".lang-toggle");
+        if (toggleButton) toggleButton.textContent = pack.toggle;
         pack.items.forEach(([selector, type, value]) => {
           document.querySelectorAll(selector).forEach((element) => {
             if (type === "html") {
@@ -2204,12 +2242,14 @@
       }
 
       const languageToggle = document.querySelector(".lang-toggle");
-      const savedLanguage = localStorage.getItem("sanheyue-language") || "zh";
+      const savedLanguage = languageToggle ? localStorage.getItem("sanheyue-language") || "zh" : "zh";
       applyLanguage(savedLanguage);
-      languageToggle.addEventListener("click", () => {
-        const currentLanguage = localStorage.getItem("sanheyue-language") || "zh";
-        applyLanguage(currentLanguage === "zh" ? "en" : "zh");
-      });
+      if (languageToggle) {
+        languageToggle.addEventListener("click", () => {
+          const currentLanguage = localStorage.getItem("sanheyue-language") || "zh";
+          applyLanguage(currentLanguage === "zh" ? "en" : "zh");
+        });
+      }
 
       const siteNav = document.querySelector(".nav");
       function updateNavState() {
@@ -2217,6 +2257,32 @@
       }
       updateNavState();
       window.addEventListener("scroll", updateNavState, { passive: true });
+
+      const heroTitle = document.querySelector(".hero-title");
+      const heroParallaxMedia = window.matchMedia("(min-width: 769px)");
+
+      function updateHeroParallax() {
+        if (!heroTitle) return;
+        if (!heroParallaxMedia.matches) {
+          heroTitle.style.setProperty("--hero-parallax-y", "0px");
+          return;
+        }
+
+        const heroRect = heroTitle.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        if (heroRect.bottom < 0 || heroRect.top > viewportHeight) return;
+
+        const scrollRatio = Math.max(-1, Math.min(1, heroRect.top / viewportHeight));
+        const offset = Math.round(scrollRatio * -28);
+        heroTitle.style.setProperty("--hero-parallax-y", `${offset}px`);
+      }
+
+      updateHeroParallax();
+      window.addEventListener("scroll", updateHeroParallax, { passive: true });
+      window.addEventListener("resize", updateHeroParallax);
+      if (heroParallaxMedia.addEventListener) {
+        heroParallaxMedia.addEventListener("change", updateHeroParallax);
+      }
 
       const bookedDates = new Set([
         "2026-07-01",
