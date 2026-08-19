@@ -1,0 +1,2410 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>彡禾悅 | 小琉球包棟民宿</title>
+    <style>
+      :root {
+        --background: #f7f8f3;
+        --foreground: #26383b;
+        --muted: rgba(38, 56, 59, 0.66);
+        --muted-soft: rgba(38, 56, 59, 0.48);
+        --primary: #657f83;
+        --secondary: #edf3f2;
+        --surface: #ffffff;
+        --deep: #203438;
+        --border: rgba(54, 76, 80, 0.16);
+        --placeholder: #dce8e6;
+        --line: rgba(54, 76, 80, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: var(--foreground);
+        font-family: "Noto Serif TC", "Microsoft JhengHei", Georgia, serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .nav {
+        position: fixed;
+        inset: 20px 0 auto;
+        z-index: 40;
+        background: transparent;
+        backdrop-filter: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        left: 50%;
+        width: min(1240px, calc(100% - 40px));
+        transform: translateX(-50%);
+        transition:
+          background 260ms ease,
+          color 260ms ease;
+      }
+
+      .nav::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -20px;
+        height: 20px;
+        background: transparent;
+        pointer-events: none;
+        transition: background 260ms ease;
+      }
+
+      .nav.is-scrolled {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(8px);
+        box-shadow: none;
+      }
+
+      .nav.is-scrolled::before {
+        background: #ffffff;
+      }
+
+      .nav-inner {
+        position: relative;
+        min-height: 74px;
+        max-width: none;
+        margin: 0 auto;
+        padding: 20px 26px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 32px;
+      }
+
+      .nav.is-scrolled .nav-inner {
+        padding-block: 18px;
+      }
+
+      .nav-brand {
+        display: grid;
+        gap: 6px;
+        justify-items: center;
+        color: rgba(255, 248, 236, 0.92);
+        text-align: center;
+        transition: color 260ms ease;
+      }
+
+      .nav-brand-main {
+        font-size: 22px;
+        letter-spacing: 0.18em;
+      }
+
+      .nav-brand-sub {
+        font-size: 10px;
+        letter-spacing: 0.34em;
+      }
+
+      .nav-menu-button {
+        width: 44px;
+        height: 44px;
+        display: inline-grid;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 248, 236, 0.92);
+        cursor: pointer;
+        transition: color 260ms ease;
+      }
+
+      .nav-menu-button span,
+      .nav-menu-button::before,
+      .nav-menu-button::after {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 1px;
+        background: currentColor;
+      }
+
+      .nav-menu-button span {
+        margin: 6px 0;
+      }
+
+      .nav-menu-button-lines {
+        display: grid;
+      }
+
+      .nav-menu-panel {
+        position: absolute;
+        left: 26px;
+        top: calc(100% + 10px);
+        min-width: 180px;
+        display: grid;
+        gap: 14px;
+        padding: 18px 20px;
+        background: rgba(255, 255, 255, 0.94);
+        color: var(--foreground);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition:
+          opacity 200ms ease,
+          transform 200ms ease;
+      }
+
+      .nav-menu-button:hover + .nav-menu-panel,
+      .nav-menu-button:focus + .nav-menu-panel,
+      .nav-menu-panel:hover,
+      .nav-menu-panel:focus-within {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .nav a {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        color: rgba(255, 248, 236, 0.86);
+        transition: color 240ms ease;
+      }
+
+      .nav-menu-panel a {
+        color: rgba(38, 56, 59, 0.74);
+        letter-spacing: 0.16em;
+      }
+
+      .nav a:hover {
+        color: #ffffff;
+      }
+
+      .nav.is-scrolled .nav-brand {
+        color: var(--foreground);
+      }
+
+      .nav.is-scrolled .nav-menu-button {
+        color: var(--foreground);
+      }
+
+      .nav.is-scrolled a {
+        color: rgba(38, 56, 59, 0.72);
+      }
+
+      .nav.is-scrolled a:hover,
+      .nav-menu-panel a:hover {
+        color: var(--foreground);
+      }
+
+      .nav-cta {
+        justify-self: end;
+        border: 1px solid rgba(255, 248, 236, 0.72);
+        border-radius: 0;
+        padding: 13px 28px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        transition:
+          background 240ms ease,
+          border-color 240ms ease,
+          color 240ms ease;
+      }
+
+      .nav-cta:hover {
+        background: rgba(255, 255, 255, 0.22);
+        color: #ffffff;
+      }
+
+      .nav.is-scrolled .nav-cta {
+        background: #8e8057;
+        border-color: transparent;
+        color: #ffffff;
+      }
+
+      .nav.is-scrolled .nav-cta:hover {
+        background: #776b49;
+        color: #ffffff;
+      }
+
+      main {
+        width: min(1240px, calc(100% - 40px));
+        margin: 20px auto;
+        overflow: hidden;
+        background: var(--background);
+        box-shadow: none;
+      }
+
+      .hero {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .hero-title {
+        --hero-parallax-y: 0px;
+        min-height: 760px;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: end;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        margin: 0;
+        padding: 176px 52px 58px;
+        color: var(--surface);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(18, 31, 34, 0.46) 0%,
+            rgba(18, 31, 34, 0.12) 26%,
+            rgba(18, 31, 34, 0.04) 56%,
+            rgba(18, 31, 34, 0.42) 100%
+          ),
+          url("public/images/hero.3.png") center calc(50% + var(--hero-parallax-y)) / cover;
+      }
+
+      .hero-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: min(780px, 100%);
+        margin: 0 auto;
+        padding: 0;
+      }
+
+      .hero-caption {
+        margin: 0;
+        color: rgba(255, 248, 236, 0.86);
+        font-size: 15px;
+        letter-spacing: 0.24em;
+      }
+
+      .hero-availability {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 148px;
+        margin-top: 22px;
+        border: 1px solid rgba(255, 248, 236, 0.62);
+        border-radius: 0;
+        padding: 13px 24px;
+        background: rgba(255, 248, 236, 0.9);
+        color: var(--foreground);
+        font-size: 13px;
+        letter-spacing: 0.16em;
+        transition:
+          background 240ms ease,
+          border-color 240ms ease,
+          color 240ms ease;
+      }
+
+      .hero-availability:hover {
+        background: #fff8ec;
+        color: var(--foreground);
+      }
+
+      .hero-photo {
+        display: none;
+      }
+
+      .hero-info-strip {
+        margin: 20px 0 0;
+        color: rgba(255, 248, 236, 0.66);
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.14em;
+      }
+
+      .image-story {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 96px 76px 0;
+      }
+
+      .image-story.reverse {
+        display: grid;
+        grid-template-columns: minmax(240px, 0.9fr) minmax(320px, 1fr);
+        align-items: center;
+        gap: 48px;
+      }
+
+      .story-image {
+        width: 100%;
+      }
+
+      .story-image img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        box-shadow: 0 28px 80px rgba(38, 56, 59, 0.14);
+      }
+
+      .story-card {
+        width: min(100%, 760px);
+        margin: 0 auto;
+        padding: 0 24px;
+        text-align: center;
+        background: transparent;
+        color: var(--foreground);
+      }
+
+      .image-story.reverse .story-card {
+        grid-column: 2;
+        margin-left: 0;
+        text-align: left;
+        padding: 0;
+      }
+
+      .image-story.reverse .story-image {
+        grid-column: 1;
+        position: relative;
+      }
+
+      .image-story.reverse .story-image::before {
+        content: "";
+        position: absolute;
+        left: -34px;
+        top: -34px;
+        width: 70%;
+        height: 70%;
+        border: 1px solid rgba(54, 76, 80, 0.18);
+        background: rgba(237, 243, 242, 0.74);
+        z-index: 0;
+      }
+
+      .image-story.reverse .story-image img {
+        position: relative;
+        z-index: 1;
+        height: auto;
+      }
+
+      .story-card::before {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 1px;
+        margin: 0 auto 32px;
+        background: var(--primary);
+      }
+
+      .story-card h2 {
+        margin: 0 0 24px;
+        font-size: 20px;
+        font-weight: 400;
+        letter-spacing: 0.2em;
+      }
+
+      .story-card p {
+        margin: 0;
+        color: rgba(38, 56, 59, 0.7);
+        line-height: 1.9;
+        letter-spacing: 0.05em;
+      }
+
+      section {
+        background: var(--background);
+      }
+
+      .about {
+        padding: 112px 0 0;
+      }
+
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .testimonials {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 48px;
+        align-items: stretch;
+      }
+
+      .testimonial {
+        text-align: center;
+        padding: 28px 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.64);
+      }
+
+      .testimonial h3,
+      .section-label {
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.2em;
+      }
+
+      .small-line {
+        width: 32px;
+        height: 1px;
+        margin: 24px auto;
+        background: var(--primary);
+      }
+
+      .testimonial p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .testimonial p:not(.source) {
+        flex: 1;
+      }
+
+      .testimonial .source {
+        margin-top: auto;
+        padding-top: 24px;
+        color: var(--muted-soft);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+
+      .about .image-story {
+        margin-top: 112px;
+      }
+
+      .amenities {
+        padding: 112px 0;
+      }
+
+      .rooms {
+        padding: 112px 24px;
+        background: var(--secondary);
+      }
+
+      .rooms .container {
+        max-width: 1120px;
+      }
+
+      .rooms .section-head {
+        margin-bottom: 0;
+        text-align: center;
+      }
+
+      .rooms .container > .section-head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .rooms .section-label {
+        display: block;
+        text-align: center;
+      }
+
+      .rooms .center-line {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .room-intro {
+        max-width: 720px;
+        margin: 32px auto 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 2;
+        text-align: center;
+      }
+
+      .room-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        margin-top: 72px;
+      }
+
+      .room-card {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+
+      .room-photo {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: var(--placeholder);
+      }
+
+      .room-photo img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .room-body {
+        padding: 32px;
+      }
+
+      .room-capacity {
+        margin: 0 0 16px;
+        color: var(--primary);
+        font-size: 12px;
+        letter-spacing: 0.25em;
+      }
+
+      .room-card h3 {
+        margin: 0 0 20px;
+        font-size: 28px;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+      }
+
+      .room-card p:last-child {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 2;
+      }
+
+      .section-head {
+        text-align: center;
+        margin-bottom: 80px;
+      }
+
+      .section-head h2,
+      .section-head p {
+        margin: 0;
+      }
+
+      .section-head .section-label {
+        color: rgba(38, 56, 59, 0.7);
+        letter-spacing: 0.3em;
+      }
+
+      .section-head .wide-title {
+        margin-top: 22px;
+        font-size: clamp(32px, 4vw, 48px);
+        font-weight: 400;
+        line-height: 1.22;
+      }
+
+      .section-head .desc {
+        margin: 24px auto 0;
+        max-width: 680px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.8;
+      }
+
+      .center-line {
+        width: 48px;
+        height: 1px;
+        margin: 32px auto 0;
+        background: var(--primary);
+      }
+
+      .amenity-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 112px;
+        border-radius: 6px;
+      }
+
+      .amenity-row:last-child {
+        margin-bottom: 0;
+      }
+
+      .amenity-row.reverse {
+        flex-direction: row-reverse;
+      }
+
+      .photo-placeholder {
+        width: 50%;
+        height: 500px;
+        display: grid;
+        place-items: center;
+        background: var(--placeholder);
+        color: rgba(38, 56, 59, 0.3);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+      }
+
+      .amenity-photo {
+        width: 50%;
+        height: 500px;
+        overflow: hidden;
+        background: var(--placeholder);
+        border-radius: 10px;
+      }
+
+      .amenity-photo img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .amenity-copy {
+        width: 50%;
+        padding: 0 72px;
+      }
+
+      .amenity-copy h3 {
+        margin: 0 0 24px;
+        font-size: clamp(28px, 3vw, 36px);
+        font-weight: 400;
+        letter-spacing: 0.04em;
+      }
+
+      .amenity-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 2;
+      }
+
+      .booking,
+      .experiences,
+      .rules {
+        padding: 112px 24px;
+      }
+
+      .booking {
+        background: var(--secondary);
+      }
+
+      .booking .container,
+      .experiences .container {
+        max-width: 960px;
+      }
+
+      .booking-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr 0.9fr 1fr;
+        align-items: stretch;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.48);
+      }
+
+      .booking-field {
+        display: grid;
+        gap: 8px;
+        min-height: 92px;
+        padding: 22px 28px;
+        border-right: 1px solid var(--border);
+      }
+
+      .booking-field span {
+        color: var(--muted-soft);
+        font-size: 13px;
+        letter-spacing: 0.14em;
+      }
+
+      .booking-field strong {
+        color: var(--foreground);
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 0.06em;
+      }
+
+      .booking-strip button {
+        border: 0;
+        background: transparent;
+        color: var(--foreground);
+        font-family: inherit;
+        font-size: 16px;
+        letter-spacing: 0.14em;
+        cursor: pointer;
+        transition:
+          background 240ms ease,
+          color 240ms ease;
+      }
+
+      .booking-strip button:hover {
+        background: var(--primary);
+        color: var(--surface);
+      }
+
+      .experience-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 64px 48px;
+      }
+
+      .experience-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 12px;
+      }
+
+      .experience-card:hover {
+        transform: translateY(-3px);
+      }
+
+      .experience-card .exp-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 22px;
+        color: #6b7b5d;
+        transition: color 240ms ease;
+      }
+
+      .experience-card:nth-child(even) .exp-icon {
+        color: #7c5c46;
+      }
+
+      .experience-card:hover .exp-icon {
+        color: #7c5c46;
+      }
+
+      .experience-card svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .experience-card h3 {
+        margin: 0 0 12px;
+        color: var(--foreground);
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+      }
+
+      .experience-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.04em;
+      }
+
+      @media (max-width: 1024px) {
+        .experience-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .rules {
+        background: var(--secondary);
+      }
+
+      .rules .container {
+        max-width: 820px;
+      }
+
+      .rule-list {
+        display: grid;
+        gap: 24px;
+      }
+
+      .rule-card {
+        display: flex;
+        gap: 24px;
+        padding: 32px;
+        border-radius: 10px;
+        background: var(--primary);
+        color: var(--surface);
+      }
+
+      .rule-icon {
+        width: 48px;
+        flex: 0 0 48px;
+        display: grid;
+        place-items: center;
+        color: var(--surface);
+        font-size: 26px;
+      }
+
+      .rule-card h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .rule-card p {
+        margin: 0;
+        color: rgba(255, 248, 236, 0.72);
+      }
+
+      .map-section {
+        position: relative;
+        height: 400px;
+      }
+
+      .map-section iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .contact-panel {
+        position: absolute;
+        inset: 0 0 0 auto;
+        width: 400px;
+        padding: 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.92);
+      }
+
+      .contact-panel p,
+      .contact-panel span,
+      .contact-panel a {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .footer-contact {
+        background: #45443f;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
+      .footer-newsletter {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1fr) auto;
+        align-items: center;
+        gap: 28px;
+        padding: 38px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .footer-newsletter h2 {
+        margin: 0;
+        color: #f4f1ec;
+        font-size: clamp(30px, 3vw, 44px);
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .footer-newsletter input {
+        width: 100%;
+        height: 48px;
+        border: 0;
+        padding: 0 22px;
+        background: #f7f6f4;
+        color: #45443f;
+        font: inherit;
+        font-size: 14px;
+        letter-spacing: 0.04em;
+      }
+
+      .footer-newsletter button {
+        height: 52px;
+        border: 0;
+        padding: 0 34px;
+        background: #857763;
+        color: #fff;
+        font: inherit;
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .footer-directory {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 80px;
+        padding: 38px 24px 54px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .footer-kicker {
+        margin: 0 0 34px;
+        color: rgba(255, 255, 255, 0.52);
+        font-size: 13px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+      }
+
+      .footer-contact-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 48px;
+      }
+
+      .footer-contact-item span {
+        display: block;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .footer-contact-item strong,
+      .footer-contact-item a,
+      .footer-contact-item small,
+      .footer-side-links a {
+        display: block;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.8;
+      }
+
+      .footer-contact-item small {
+        margin-top: 12px;
+      }
+
+      .footer-contact-item a,
+      .footer-side-links a {
+        width: fit-content;
+        transition: color 220ms ease;
+      }
+
+      .footer-contact-item a:hover,
+      .footer-side-links a:hover {
+        color: #ffffff;
+      }
+
+      .footer-side-links {
+        display: grid;
+        gap: 24px;
+        align-content: start;
+      }
+
+      .footer-bottom {
+        background: #45443f;
+        padding: 30px 24px;
+      }
+
+      .footer-bottom .container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 24px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .footer-brand {
+        color: #f4f1ec;
+        font-size: 23px;
+        letter-spacing: 0.08em;
+      }
+
+      .footer-social {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .footer-social a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 16px;
+        letter-spacing: 0;
+      }
+
+      .footer-policy {
+        justify-self: end;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .line-button {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        z-index: 50;
+        width: 56px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: #06c755;
+        color: #fff;
+        box-shadow: 0 18px 38px rgba(6, 199, 85, 0.25);
+        transition:
+          transform 240ms ease,
+          box-shadow 240ms ease;
+      }
+
+      .line-button:hover {
+        transform: scale(1.06);
+        box-shadow: 0 22px 44px rgba(6, 199, 85, 0.35);
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .availability-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+        background: rgba(24, 34, 36, 0.56);
+        backdrop-filter: blur(6px);
+      }
+
+      .availability-modal.is-open {
+        display: flex;
+      }
+
+      .availability-dialog {
+        width: min(760px, 100%);
+        max-height: calc(100vh - 56px);
+        overflow: auto;
+        background: var(--surface);
+        box-shadow: 0 34px 110px rgba(18, 30, 33, 0.34);
+      }
+
+      .availability-topbar {
+        display: grid;
+        grid-template-columns: 48px 1fr 48px;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border);
+        background: #d8d4c9;
+      }
+
+      .availability-topbar h2 {
+        margin: 0;
+        text-align: center;
+        color: var(--foreground);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+      }
+
+      .availability-icon-button {
+        width: 42px;
+        height: 42px;
+        border: 0;
+        background: transparent;
+        color: var(--foreground);
+        font-size: 30px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .availability-body {
+        padding: 38px 42px 28px;
+      }
+
+      .availability-note {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 24px 30px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .availability-note strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+      }
+
+      .availability-note p {
+        margin: 0;
+        line-height: 1.8;
+      }
+
+      .availability-brand {
+        align-self: center;
+        color: var(--foreground);
+        font-size: 22px;
+        letter-spacing: 0.18em;
+        white-space: nowrap;
+      }
+
+      .availability-calendar-head {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        margin: 44px 0 24px;
+      }
+
+      .availability-calendar-head h3 {
+        margin: 0;
+        text-align: center;
+        color: var(--foreground);
+        font-size: 24px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
+
+      .availability-nav {
+        width: 44px;
+        height: 44px;
+        border: 0;
+        background: transparent;
+        color: var(--foreground);
+        font-size: 34px;
+        cursor: pointer;
+      }
+
+      .availability-weekdays,
+      .availability-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+      }
+
+      .availability-weekdays {
+        margin-bottom: 10px;
+        color: var(--muted);
+        text-align: center;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+      }
+
+      .availability-day {
+        min-height: 82px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--foreground);
+        font-family: inherit;
+        cursor: pointer;
+        transition:
+          background 220ms ease,
+          border-color 220ms ease,
+          color 220ms ease;
+      }
+
+      .availability-day strong,
+      .availability-day span {
+        display: block;
+      }
+
+      .availability-day strong {
+        margin-bottom: 8px;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .availability-day span {
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+
+      .availability-day.is-empty {
+        border-color: transparent;
+        background: transparent;
+        cursor: default;
+      }
+
+      .availability-day.is-booked {
+        border-color: rgba(38, 56, 59, 0.08);
+        background: #eef0ed;
+        color: var(--muted-soft);
+        cursor: not-allowed;
+      }
+
+      .availability-day.is-selected,
+      .availability-day:not(.is-empty):not(.is-booked):hover {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: var(--surface);
+      }
+
+      .availability-day.is-selected span,
+      .availability-day:not(.is-empty):not(.is-booked):hover span {
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      .availability-footer {
+        position: sticky;
+        bottom: 0;
+        display: grid;
+        gap: 16px;
+        padding: 20px 42px 32px;
+        background: linear-gradient(rgba(255, 255, 255, 0.9), var(--surface) 28%);
+      }
+
+      .availability-status {
+        min-height: 22px;
+        margin: 0;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .availability-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        border: 0;
+        background: #f3f4f3;
+        color: var(--muted-soft);
+        font-size: 15px;
+        letter-spacing: 0.14em;
+        pointer-events: none;
+      }
+
+      .availability-line.is-active {
+        background: var(--primary);
+        color: var(--surface);
+        pointer-events: auto;
+      }
+
+      @media (max-width: 860px) {
+        body {
+          background: var(--background);
+        }
+
+        main {
+          width: 100%;
+          margin: 0;
+          box-shadow: none;
+        }
+
+        .nav {
+          top: 12px;
+          width: calc(100% - 24px);
+        }
+
+        .nav-inner {
+          gap: 18px;
+          overflow-x: auto;
+        }
+
+        .nav-inner {
+          grid-template-columns: auto 1fr auto;
+          gap: 14px;
+          overflow: visible;
+        }
+
+        .nav-brand-main {
+          font-size: 18px;
+        }
+
+        .nav-brand-sub {
+          font-size: 9px;
+          letter-spacing: 0.24em;
+        }
+
+        .nav-menu-panel {
+          left: 18px;
+        }
+
+        .nav-cta {
+          padding: 10px 14px;
+          font-size: 10px;
+          letter-spacing: 0.1em;
+        }
+
+        .hero-title {
+          --hero-parallax-y: 0px;
+          min-height: auto;
+          grid-template-columns: 1fr;
+          padding: 320px 24px 44px;
+        }
+
+        .hero-info-strip {
+          font-size: 12px;
+          line-height: 1.9;
+        }
+
+        .hero-photo {
+          display: none;
+        }
+
+        .story-card,
+        .photo-placeholder,
+        .amenity-photo,
+        .amenity-copy {
+          width: 100%;
+        }
+
+        .image-story,
+        .image-story.reverse,
+        .amenity-row,
+        .amenity-row.reverse {
+          display: block;
+        }
+
+        .image-story {
+          padding: 72px 28px 0;
+        }
+
+        .image-story.reverse .story-image::before {
+          left: -14px;
+          top: -14px;
+        }
+
+        .story-card {
+          padding: 40px 0 0;
+        }
+
+        .testimonials,
+        .booking-strip,
+        .experience-grid,
+        .room-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .booking-field {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .amenity-row {
+          margin-bottom: 96px;
+        }
+
+        .photo-placeholder,
+        .amenity-photo {
+          height: 360px;
+        }
+
+        .amenity-copy {
+          padding: 40px 6px 0;
+        }
+
+        .booking,
+        .experiences,
+        .rules,
+        .rooms,
+        .amenities {
+          padding-top: 88px;
+          padding-bottom: 88px;
+        }
+
+        .map-section {
+          height: 620px;
+        }
+
+        .contact-panel {
+          top: auto;
+          width: 100%;
+          min-height: 360px;
+          padding: 36px 28px;
+        }
+
+        .footer-newsletter,
+        .footer-directory,
+        .footer-contact-grid,
+        .footer-bottom .container {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-newsletter {
+          gap: 18px;
+          padding: 34px 24px;
+        }
+
+        .footer-newsletter button {
+          width: 100%;
+        }
+
+        .footer-directory {
+          gap: 40px;
+        }
+
+        .footer-contact-grid {
+          gap: 30px;
+        }
+
+        .footer-social,
+        .footer-policy,
+        .footer-brand {
+          justify-self: start;
+        }
+
+        .availability-modal {
+          padding: 0;
+          align-items: stretch;
+        }
+
+        .availability-dialog {
+          width: 100%;
+          max-height: 100vh;
+        }
+
+        .availability-body {
+          padding: 28px 18px 22px;
+        }
+
+        .availability-note {
+          display: block;
+          padding: 22px;
+        }
+
+        .availability-brand {
+          display: block;
+          margin-top: 18px;
+          font-size: 18px;
+        }
+
+        .availability-day {
+          min-height: 62px;
+        }
+
+        .availability-day strong {
+          font-size: 17px;
+        }
+
+        .availability-day span {
+          font-size: 10px;
+        }
+
+        .availability-footer {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="主導覽">
+        <button class="nav-menu-button" type="button" aria-label="開啟選單">
+          <span class="nav-menu-button-lines" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu-panel">
+          <a href="#about">關於</a>
+          <a href="#amenities">空間</a>
+          <a href="#rooms">房型</a>
+          <a href="#booking">預約</a>
+          <a href="#contact">聯繫</a>
+        </div>
+        <a class="nav-brand" href="#home" aria-label="彡禾悅首頁">
+          <span class="nav-brand-main">彡禾悅</span>
+          <span class="nav-brand-sub">SHAN HE YUE</span>
+        </a>
+        <a class="nav-cta" href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer">LINE 詢問</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-title">
+          <div class="hero-footer">
+            <p class="hero-caption">小琉球三合院包棟民宿</p>
+            <a href="#availability" data-availability-open class="hero-availability">查詢空房</a>
+            <p class="hero-info-strip">12–16 人包棟｜4 間房｜KTV｜電動麻將｜烤肉</p>
+          </div>
+          <div class="hero-photo">
+            <img src="public/images/sanheyue-exterior-front.jpeg" alt="彡禾悅民宿庭院外觀" />
+          </div>
+        </div>
+
+        <div class="image-story">
+          <div class="story-card">
+            <h2>回家的感覺，不一定是在家。</h2>
+            <p>
+              在小琉球的三合院老宅裡，<br />
+              和家人朋友一起慢慢生活幾天。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about">
+        <div class="container testimonials">
+          <article class="testimonial">
+            <h3>溫馨的三合院包棟體驗</h3>
+            <div class="small-line"></div>
+            <p>溫馨的包棟三合院民宿，床非常好睡，瓦斯烤肉爐方便好用。四間房格局對稱，還有電動麻將桌、投影機、卡拉 OK，以及熱心熱情的老闆娘。</p>
+            <p class="source">★★★★★ Benson Liu・Google 評論</p>
+          </article>
+          <article class="testimonial">
+            <h3>大人小孩都合適的落腳處</h3>
+            <div class="small-line"></div>
+            <p>乾淨、簡潔、溫馨，從民宿風格到闆娘本人都很親切。孩子可以在前庭安全奔跑，大人舒適聊天，客廳溫馨，整體配備不花俏，但都剛好在需求點上。</p>
+            <p class="source">★★★★★ Remy HOU・Google 評論</p>
+          </article>
+          <article class="testimonial">
+            <h3>留下滿滿回憶的家族旅遊</h3>
+            <div class="small-line"></div>
+            <p>老闆非常熱心，會協助客人在小琉球的各項事宜，讓我們大大小小玩得非常開心。這趟家族旅遊留下滿滿回憶，會再二訪。</p>
+            <p class="source">★★★★★ 許淑君・Google 評論</p>
+          </article>
+        </div>
+
+        <div class="image-story reverse">
+          <div class="story-image">
+            <img src="public/images/sanheyue-exterior-front.jpeg" alt="彡禾悅民宿庭院外觀" />
+          </div>
+          <div class="story-card">
+            <h2>一座承載回憶的三合院</h2>
+            <p>
+              這裡曾是三代同堂生活的家。<br />
+              <br />
+              經過整理與翻修後，<br />
+              我們保留老屋的人情味與記憶，<br />
+              加入現代舒適的住宿空間。<br />
+              <br />
+              讓來到小琉球的家人與朋友，<br />
+              能在同一個屋簷下自在相聚。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="amenities" class="amenities">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-label">空間與設備</h2>
+            <div class="center-line"></div>
+          </div>
+
+          <article class="amenity-row">
+            <div class="amenity-photo">
+              <img src="public/images/amenities/entertainment.jpg" alt="彡禾悅娛樂空間" />
+            </div>
+            <div class="amenity-copy">
+              <h3>娛樂相聚</h3>
+              <p>夜晚回到三合院，朋友圍在客廳唱歌、打麻將、看電影。KTV、電動麻將桌、投影設備與 Netflix 都已準備好，讓一群人的旅行不只停留在白天，也延續到每個熱鬧的夜晚。</p>
+            </div>
+          </article>
+
+          <article class="amenity-row reverse">
+            <div class="amenity-photo">
+              <img src="public/images/amenities/island-living.jpg" alt="彡禾悅海島起居空間" />
+            </div>
+            <div class="amenity-copy">
+              <h3>海島起居</h3>
+              <p>包棟旅行最舒服的地方，是可以像在家一樣自由安排每一餐。彡禾悅備有廚房、冰箱、飲水機與洗衣機，也提供戶外烤肉空間。白天出門探索小琉球，晚上回來一起下廚、烤肉、聊天，把旅行過成幾天自在的生活。</p>
+            </div>
+          </article>
+
+          <article class="amenity-row">
+            <div class="amenity-photo">
+              <img src="public/images/amenities/cola.jpg" alt="彡禾悅毛孩友善小狗可樂" />
+            </div>
+            <div class="amenity-copy">
+              <h3>毛孩友善</h3>
+              <p>彡禾悅也有一位可愛的小主人，牠叫可樂。我們知道毛孩也是家人，所以歡迎旅人帶著牠們一起來小琉球旅行。在庭院裡曬太陽、散步、陪家人朋友一起度過假期，讓毛孩也成為這趟相聚時光的一部分。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="rooms" class="rooms">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-label">客房資訊</h2>
+            <div class="center-line"></div>
+            <p class="room-intro">
+              四間房型以自然意象命名，延續彡禾悅安靜、文雅的品牌調性。包棟入住時，能依照家人與好友的需求自在分配空間。
+            </p>
+          </div>
+
+          <div class="room-grid">
+            <article class="room-card">
+              <div class="room-photo">
+                <img src="public/images/rooms/tingfeng.jpg" alt="聽風四人房" />
+              </div>
+              <div class="room-body">
+                <p class="room-capacity">4 人入住</p>
+                <h3>聽風四人房</h3>
+                <p>在柔和光影與挑高空間中，享受自在放鬆的休憩時光。</p>
+              </div>
+            </article>
+            <article class="room-card">
+              <div class="room-photo">
+                <img src="public/images/rooms/chenxi.jpg" alt="晨曦四人房" />
+              </div>
+              <div class="room-body">
+                <p class="room-capacity">4 人入住</p>
+                <h3>晨曦四人房</h3>
+                <p>清晨陽光灑落房間，讓旅行從舒適甦醒開始。</p>
+              </div>
+            </article>
+            <article class="room-card">
+              <div class="room-photo">
+                <img src="public/images/rooms/wangyue.jpg" alt="望玥雙人房" />
+              </div>
+              <div class="room-body">
+                <p class="room-capacity">2 人入住</p>
+                <h3>望玥雙人房</h3>
+                <p>以柔和海洋色調打造寧靜空間，適合兩人的悠閒旅程。</p>
+              </div>
+            </article>
+            <article class="room-card">
+              <div class="room-photo">
+                <img src="public/images/rooms/lingyu.jpg" alt="聆雨雙人房" />
+              </div>
+              <div class="room-body">
+                <p class="room-capacity">2 人入住</p>
+                <h3>聆雨雙人房</h3>
+                <p>溫暖木質元素與簡約設計，享受專屬於自己的靜謐時光。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="booking" class="booking">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-label">預約流程</p>
+            <h2 class="wide-title">準備好來小琉球聚聚了嗎？</h2>
+            <p class="desc">查看空房後，歡迎透過 LINE 聯繫我們，<br />我們會協助確認入住日期與訂房細節。</p>
+          </div>
+
+          <div class="booking-strip">
+            <div class="booking-field">
+              <span>入住</span>
+              <strong>選擇日期</strong>
+            </div>
+            <div class="booking-field">
+              <span>退房</span>
+              <strong>確認天數</strong>
+            </div>
+            <div class="booking-field">
+              <span>人數</span>
+              <strong>12-16 人</strong>
+            </div>
+            <button type="button" data-availability-open>查詢空房</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="experiences" class="experiences">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-label">專屬海島體驗</p>
+            <h2 class="wide-title">旅程中的加購體驗</h2>
+            <p class="desc">從船票、機車到小琉球在地體驗，<br />我們可以協助您事先安排，讓旅程更輕鬆。</p>
+          </div>
+
+          <div class="experience-grid">
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 30c5 3 29 3 34 0l-5 7H14l-7-7Z" /><path d="M14 29V15h18l6 14" /><path d="M18 20h5M28 20h5" /><path d="M10 40c3 2 6 2 9 0 3 2 6 2 9 0 3 2 6 2 9 0" /></svg>
+              </span>
+              <h3>船票來回</h3>
+              <p>大人 400 / 小孩 250</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M15 34a5 5 0 1 0 0 .1M35 34a5 5 0 1 0 0 .1" /><path d="M15 34h8l6-12h6l3 12" /><path d="M23 34l-5-13h7" /><path d="M27 18h5" /></svg>
+              </span>
+              <h3>機車租賃</h3>
+              <p>350 / 台 / 24hr</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 31c5-4 9-4 14 0s9 4 14 0 6-3 6-3" /><path d="M12 20c4-4 9-5 14-2s8 3 12 0" /><path d="M16 37h16" /><path d="M21 13l3-5 3 5" /></svg>
+              </span>
+              <h3>潮間帶導覽</h3>
+              <p>100 / 人</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M31 8c-7 2-12 8-12 16s5 14 12 16c-11 1-21-7-21-16S20 7 31 8Z" /><path d="M34 16l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3Z" /></svg>
+              </span>
+              <h3>夜遊導覽</h3>
+              <p>100 / 人</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 26c8-10 22-10 32 0-10 10-24 10-32 0Z" /><path d="M34 22l6-5v18l-6-5" /><path d="M18 26h.1" /><path d="M10 38c5 2 10 2 15 0s9-2 13 0" /></svg>
+              </span>
+              <h3>浮潛體驗</h3>
+              <p>400 / 人</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 39h16" /><path d="M18 24h12c3 0 6 3 6 6v2H12v-2c0-3 3-6 6-6Z" /><path d="M19 18c-2-2-2-5 0-7M25 18c-2-2-2-5 0-7M31 18c-2-2-2-5 0-7" /></svg>
+              </span>
+              <h3>烤肉吃到飽</h3>
+              <p>大人 400 / 小孩 250</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 31c7 5 25 5 32 0-2 5-7 8-16 8S10 36 8 31Z" /><path d="M15 28l18-14" /><path d="M20 13l16 20" /></svg>
+              </span>
+              <h3>獨木舟</h3>
+              <p>550 / 人</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 35c6 3 14 3 20 0" /><path d="M24 11v22" /><path d="M17 17h14" /><path d="M16 39h16" /></svg>
+              </span>
+              <h3>立槳 SUP</h3>
+              <p>900 / 人</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 27c5 5 27 5 32 0l-4 9H12l-4-9Z" /><path d="M14 27l4-10h12l4 10" /><path d="M20 22h8" /><path d="M11 39c4 2 8 2 12 0s8-2 13 0" /></svg>
+              </span>
+              <h3>玻璃船</h3>
+              <p>大人 330 / 小孩 250</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M17 29c0-8 5-14 12-14h4v8h-4c-3 0-5 3-5 6v8h-7v-8Z" /><path d="M33 15l6-3v14l-6-3" /><path d="M13 37h18" /><path d="M10 42c4 2 8 2 12 0s8-2 12 0" /></svg>
+              </span>
+              <h3>深潛體驗</h3>
+              <p>2200 / 一對一</p>
+            </article>
+            <article class="experience-card">
+              <span class="exp-icon">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 33a4 4 0 1 0 0 .1M34 33a4 4 0 1 0 0 .1" /><path d="M14 33h20" /><path d="M18 29l4-8h11l5 8" /><path d="M24 21v-5h8" /></svg>
+              </span>
+              <h3>卡丁車</h3>
+              <p>單人 270 / 雙人 320</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules" class="rules">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-label">住宿約定</p>
+            <h2 class="wide-title">讓美好延續</h2>
+          </div>
+
+          <div class="rule-list">
+            <article class="rule-card">
+              <div class="rule-icon">□</div>
+              <div><h3>入住 / 退房時間</h3><p>入住時間 15:00，退房時間 11:00</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">◇</div>
+              <div><h3>綠色環保</h3><p>不主動提供一次性盥洗用品，如牙刷、刮鬍刀、浴帽等</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">○</div>
+              <div><h3>享受靜謐</h3><p>每晚 22:00 後請降低音量，全面禁止室內吸菸與施放煙火</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>民宿有幾間房？</h3><p>我們共有 4 間房（2 間四人房、2 間雙人房），採包棟住宿。最舒適入住 12 人，最多可入住 16 人。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>可以烤肉嗎？</h3><p>可以，我們有提供烤肉區。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>有 KTV 嗎？</h3><p>有，民宿提供行動 KTV，搭配 55 吋電視及麥克風，入住期間皆可使用，可自行搜尋喜歡的歌曲歡唱。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>KTV 有使用時間限制嗎？</h3><p>KTV 室內歡唱不限時間。但晚上 22:00 後，請避免在戶外喧嘩或播放音樂，一起維護鄰里安寧，謝謝您的配合。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>有提供一次性備品嗎？</h3><p>配合環保政策，民宿不主動提供一次性備品。若有臨時需求，歡迎向我們告知，我們會協助提供。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>可以攜帶寵物嗎？</h3><p>可以，我們歡迎毛孩入住。5 公斤以下每隻 200 元，5 公斤以上每隻 300 元。也請主人協助維持環境整潔，讓每位旅人和毛孩都能享受舒適的住宿環境。</p></div>
+            </article>
+            <article class="rule-card">
+              <div class="rule-icon">Q</div>
+              <div><h3>有提供行李載送服務嗎？</h3><p>有，我們提供行李載送服務。如有需要，請於入住前提前告知，我們會協助安排。</p></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <footer id="contact">
+        <div class="map-section">
+          <iframe
+            src="https://www.google.com/maps?q=%E5%BD%A1%E7%A6%BE%E6%82%85%E5%8C%85%E6%A3%9F%E6%B0%91%E5%AE%BF%EF%BD%9C%E5%B0%8F%E7%90%89%E7%90%83%20Shan%20He%20Yue%20Inn&z=17&output=embed"
+            title="彡禾悅位置"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+
+          <div class="contact-panel">
+            <p>
+              彡禾悅位於小琉球杉福村，<br />
+              坐落在安靜的住宅區小巷弄裡。<br />
+              <br />
+              抵達小琉球後，<br />
+              可依照 Google Maps 導航前往民宿。
+            </p>
+          </div>
+        </div>
+
+        <div class="footer-contact">
+          <div class="container footer-newsletter">
+            <h2>JOIN OUR FAMILY</h2>
+            <input type="email" aria-label="Email address" placeholder="TYPE YOUR EMAIL ADDRESS..." />
+            <button type="button">JOIN US</button>
+          </div>
+
+          <div class="container footer-directory">
+            <div>
+              <p class="footer-kicker">彡禾悅資訊</p>
+              <div class="footer-contact-grid">
+                <div class="footer-contact-item">
+                  <span>聯絡人</span>
+                  <strong>彡禾悅管家</strong>
+                  <a href="tel:0919172702">0919-172-702</a>
+                  <small>LINE 預約為主</small>
+                </div>
+                <div class="footer-contact-item">
+                  <span>地址</span>
+                  <strong>屏東縣琉球鄉（小琉球）</strong>
+                  <a href="https://maps.app.goo.gl/tagLzZu646FLm7pb6" target="_blank" rel="noopener noreferrer">Google Maps 導航</a>
+                </div>
+                <div class="footer-contact-item">
+                  <span>社群</span>
+                  <strong>Instagram</strong>
+                  <a href="https://www.instagram.com/shanheyue.inn/" target="_blank" rel="noopener noreferrer">@shanheyue.inn</a>
+                </div>
+                <div class="footer-contact-item">
+                  <span>網站</span>
+                  <strong>彡禾悅官方網站</strong>
+                  <a href="#home">回到首頁</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-side-links">
+              <p class="footer-kicker">快速連結</p>
+              <a href="#home">首頁</a>
+              <a href="#about">關於民宿</a>
+              <a href="#rooms">客房資訊</a>
+              <a href="#booking">預約流程</a>
+              <a href="#contact">聯繫我們</a>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <div class="container">
+              <div class="footer-brand">彡禾悅</div>
+              <div class="footer-social">
+                <span>FOLLOW US</span>
+                <a href="https://www.instagram.com/shanheyue.inn/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                <a href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer" aria-label="LINE">LINE</a>
+                <a href="https://maps.app.goo.gl/tagLzZu646FLm7pb6" target="_blank" rel="noopener noreferrer" aria-label="Google Maps">MAP</a>
+              </div>
+              <a class="footer-policy" href="#rules">隱私政策</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <div class="availability-modal" id="availability-modal" aria-hidden="true">
+      <div class="availability-dialog" role="dialog" aria-modal="true" aria-labelledby="availability-title">
+        <div class="availability-topbar">
+          <button class="availability-icon-button" type="button" aria-label="選單">≡</button>
+          <h2 id="availability-title">Search</h2>
+          <button class="availability-icon-button" type="button" data-availability-close aria-label="關閉">×</button>
+        </div>
+
+        <div class="availability-body">
+          <div class="availability-note">
+            <div>
+              <strong>查詢彡禾悅空房</strong>
+              <p>灰色日期為已預定。選擇可安排日期後，可直接透過 LINE 與我們確認細節。</p>
+            </div>
+            <div class="availability-brand">彡禾悅</div>
+          </div>
+
+          <div class="availability-calendar-head">
+            <button class="availability-nav" type="button" data-calendar-prev aria-label="上一個月">‹</button>
+            <h3 data-calendar-title>July 2026</h3>
+            <button class="availability-nav" type="button" data-calendar-next aria-label="下一個月">›</button>
+          </div>
+
+          <div class="availability-weekdays" aria-hidden="true">
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+          </div>
+          <div class="availability-grid" data-availability-grid></div>
+        </div>
+
+        <div class="availability-footer">
+          <p class="availability-status" data-availability-status>請選擇想入住的日期</p>
+          <a class="availability-line" data-availability-line href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer">LINE 詢問空房</a>
+        </div>
+      </div>
+    </div>
+
+    <a class="line-button" href="https://line.me/R/ti/p/@477rnchd" target="_blank" rel="noopener noreferrer" aria-label="LINE 預約">LINE</a>
+
+    <script>
+      const i18n = {
+        zh: {
+          title: "彡禾悅 | 小琉球包棟民宿",
+          htmlLang: "zh-Hant",
+          toggle: "EN",
+          items: [
+            [".nav-brand-main", "text", "彡禾悅"],
+            [".nav-brand-sub", "text", "SHAN HE YUE"],
+            [".nav-menu-panel a:nth-child(1)", "text", "關於"],
+            [".nav-menu-panel a:nth-child(2)", "text", "空間"],
+            [".nav-menu-panel a:nth-child(3)", "text", "房型"],
+            [".nav-menu-panel a:nth-child(4)", "text", "預約"],
+            [".nav-menu-panel a:nth-child(5)", "text", "聯繫"],
+            [".nav-cta", "text", "LINE 詢問"],
+            [".hero-caption", "text", "小琉球三合院包棟民宿"],
+            [".hero-availability", "text", "查詢空房"],
+            [".hero-info-strip", "text", "12–16 人包棟｜4 間房｜KTV｜電動麻將｜烤肉"],
+            [".hero .image-story .story-card h2", "text", "回家的感覺，不一定是在家。"],
+            [".hero .image-story .story-card p", "html", "在小琉球的三合院老宅裡，<br />和家人朋友一起慢慢生活幾天。"],
+            [".testimonial:nth-child(1) h3", "text", "溫馨的三合院包棟體驗"],
+            [".testimonial:nth-child(1) p:not(.source)", "text", "溫馨的包棟三合院民宿，床非常好睡，瓦斯烤肉爐方便好用。四間房格局對稱，還有電動麻將桌、投影機、卡拉 OK，以及熱心熱情的老闆娘。"],
+            [".testimonial:nth-child(1) .source", "text", "★★★★★ Benson Liu・Google 評論"],
+            [".testimonial:nth-child(2) h3", "text", "大人小孩都合適的落腳處"],
+            [".testimonial:nth-child(2) p:not(.source)", "text", "乾淨、簡潔、溫馨，從民宿風格到闆娘本人都很親切。孩子可以在前庭安全奔跑，大人舒適聊天，客廳溫馨，整體配備不花俏，但都剛好在需求點上。"],
+            [".testimonial:nth-child(2) .source", "text", "★★★★★ Remy HOU・Google 評論"],
+            [".testimonial:nth-child(3) h3", "text", "留下滿滿回憶的家族旅遊"],
+            [".testimonial:nth-child(3) p:not(.source)", "text", "老闆非常熱心，會協助客人在小琉球的各項事宜，讓我們大大小小玩得非常開心。這趟家族旅遊留下滿滿回憶，會再二訪。"],
+            [".testimonial:nth-child(3) .source", "text", "★★★★★ 許淑君・Google 評論"],
+            [".about .image-story.reverse .story-card h2", "text", "一座承載回憶的三合院"],
+            [".about .image-story.reverse .story-card p", "html", "這裡曾是三代同堂生活的家。<br /><br />經過整理與翻修後，<br />我們保留老屋的人情味與記憶，<br />加入現代舒適的住宿空間。<br /><br />讓來到小琉球的家人與朋友，<br />能在同一個屋簷下自在相聚。"],
+            ["#amenities .section-label", "text", "空間與設備"],
+            [".amenity-row:nth-of-type(1) h3", "text", "娛樂相聚"],
+            [".amenity-row:nth-of-type(1) p", "text", "夜晚回到三合院，朋友圍在客廳唱歌、打麻將、看電影。KTV、電動麻將桌、投影設備與 Netflix 都已準備好，讓一群人的旅行不只停留在白天，也延續到每個熱鬧的夜晚。"],
+            [".amenity-row:nth-of-type(2) h3", "text", "海島起居"],
+            [".amenity-row:nth-of-type(2) p", "text", "包棟旅行最舒服的地方，是可以像在家一樣自由安排每一餐。彡禾悅備有廚房、冰箱、飲水機與洗衣機，也提供戶外烤肉空間。白天出門探索小琉球，晚上回來一起下廚、烤肉、聊天，把旅行過成幾天自在的生活。"],
+            [".amenity-row:nth-of-type(3) h3", "text", "毛孩友善"],
+            [".amenity-row:nth-of-type(3) p", "text", "彡禾悅也有一位可愛的小主人，牠叫可樂。我們知道毛孩也是家人，所以歡迎旅人帶著牠們一起來小琉球旅行。在庭院裡曬太陽、散步、陪家人朋友一起度過假期，讓毛孩也成為這趟相聚時光的一部分。"],
+            ["#rooms .section-label", "text", "客房資訊"],
+            [".room-intro", "text", "四間房型以自然意象命名，延續彡禾悅安靜、文雅的品牌調性。包棟入住時，能依照家人與好友的需求自在分配空間。"],
+            [".room-card:nth-child(1) .room-capacity", "text", "4 人入住"],
+            [".room-card:nth-child(1) h3", "text", "聽風四人房"],
+            [".room-card:nth-child(1) p:last-child", "text", "在柔和光影與挑高空間中，享受自在放鬆的休憩時光。"],
+            [".room-card:nth-child(2) .room-capacity", "text", "4 人入住"],
+            [".room-card:nth-child(2) h3", "text", "晨曦四人房"],
+            [".room-card:nth-child(2) p:last-child", "text", "清晨陽光灑落房間，讓旅行從舒適甦醒開始。"],
+            [".room-card:nth-child(3) .room-capacity", "text", "2 人入住"],
+            [".room-card:nth-child(3) h3", "text", "望玥雙人房"],
+            [".room-card:nth-child(3) p:last-child", "text", "以柔和海洋色調打造寧靜空間，適合兩人的悠閒旅程。"],
+            [".room-card:nth-child(4) .room-capacity", "text", "2 人入住"],
+            [".room-card:nth-child(4) h3", "text", "聆雨雙人房"],
+            [".room-card:nth-child(4) p:last-child", "text", "溫暖木質元素與簡約設計，享受專屬於自己的靜謐時光。"],
+            ["#booking .section-label", "text", "預約流程"],
+            ["#booking .wide-title", "text", "準備好來小琉球聚聚了嗎？"],
+            ["#booking .desc", "html", "查看空房後，歡迎透過 LINE 聯繫我們，<br />我們會協助確認入住日期與訂房細節。"],
+            [".booking-field:nth-child(1) span", "text", "入住"],
+            [".booking-field:nth-child(1) strong", "text", "選擇日期"],
+            [".booking-field:nth-child(2) span", "text", "退房"],
+            [".booking-field:nth-child(2) strong", "text", "確認天數"],
+            [".booking-field:nth-child(3) span", "text", "人數"],
+            [".booking-field:nth-child(3) strong", "text", "12-16 人"],
+            [".booking-strip button", "text", "查詢空房"],
+            ["#experiences .section-label", "text", "專屬海島體驗"],
+            ["#experiences .wide-title", "text", "旅程中的加購體驗"],
+            ["#experiences .desc", "html", "從船票、機車到小琉球在地體驗，<br />我們可以協助您事先安排，讓旅程更輕鬆。"],
+            [".experience-card:nth-child(1) h3", "text", "船票來回"],
+            [".experience-card:nth-child(1) p", "text", "大人 400 / 小孩 250"],
+            [".experience-card:nth-child(2) h3", "text", "機車租賃"],
+            [".experience-card:nth-child(2) p", "text", "350 / 台 / 24hr"],
+            [".experience-card:nth-child(3) h3", "text", "潮間帶導覽"],
+            [".experience-card:nth-child(3) p", "text", "100 / 人"],
+            [".experience-card:nth-child(4) h3", "text", "夜遊導覽"],
+            [".experience-card:nth-child(4) p", "text", "100 / 人"],
+            [".experience-card:nth-child(5) h3", "text", "浮潛體驗"],
+            [".experience-card:nth-child(5) p", "text", "400 / 人"],
+            [".experience-card:nth-child(6) h3", "text", "烤肉吃到飽"],
+            [".experience-card:nth-child(6) p", "text", "大人 400 / 小孩 250"],
+            [".experience-card:nth-child(7) h3", "text", "獨木舟"],
+            [".experience-card:nth-child(7) p", "text", "550 / 人"],
+            [".experience-card:nth-child(8) h3", "text", "立槳 SUP"],
+            [".experience-card:nth-child(8) p", "text", "900 / 人"],
+            [".experience-card:nth-child(9) h3", "text", "玻璃船"],
+            [".experience-card:nth-child(9) p", "text", "大人 330 / 小孩 250"],
+            [".experience-card:nth-child(10) h3", "text", "深潛體驗"],
+            [".experience-card:nth-child(10) p", "text", "2200 / 一對一"],
+            [".experience-card:nth-child(11) h3", "text", "卡丁車"],
+            [".experience-card:nth-child(11) p", "text", "單人 270 / 雙人 320"],
+            ["#rules .section-label", "text", "住宿約定"],
+            ["#rules .wide-title", "text", "讓美好延續"],
+            [".rule-card:nth-child(1) h3", "text", "入住 / 退房時間"],
+            [".rule-card:nth-child(1) p", "text", "入住時間 15:00，退房時間 11:00"],
+            [".rule-card:nth-child(2) h3", "text", "綠色環保"],
+            [".rule-card:nth-child(2) p", "text", "不主動提供一次性盥洗用品，如牙刷、刮鬍刀、浴帽等"],
+            [".rule-card:nth-child(3) h3", "text", "享受靜謐"],
+            [".rule-card:nth-child(3) p", "text", "每晚 22:00 後請降低音量，全面禁止室內吸菸與施放煙火"],
+            [".rule-card:nth-child(4) h3", "text", "民宿有幾間房？"],
+            [".rule-card:nth-child(4) p", "text", "我們共有 4 間房（2 間四人房、2 間雙人房），採包棟住宿。最舒適入住 12 人，最多可入住 16 人。"],
+            [".rule-card:nth-child(5) h3", "text", "可以烤肉嗎？"],
+            [".rule-card:nth-child(5) p", "text", "可以，我們有提供烤肉區。"],
+            [".rule-card:nth-child(6) h3", "text", "有 KTV 嗎？"],
+            [".rule-card:nth-child(6) p", "text", "有，民宿提供行動 KTV，搭配 55 吋電視及麥克風，入住期間皆可使用，可自行搜尋喜歡的歌曲歡唱。"],
+            [".rule-card:nth-child(7) h3", "text", "KTV 有使用時間限制嗎？"],
+            [".rule-card:nth-child(7) p", "text", "KTV 室內歡唱不限時間。但晚上 22:00 後，請避免在戶外喧嘩或播放音樂，一起維護鄰里安寧，謝謝您的配合。"],
+            [".rule-card:nth-child(8) h3", "text", "有提供一次性備品嗎？"],
+            [".rule-card:nth-child(8) p", "text", "配合環保政策，民宿不主動提供一次性備品。若有臨時需求，歡迎向我們告知，我們會協助提供。"],
+            [".rule-card:nth-child(9) h3", "text", "可以攜帶寵物嗎？"],
+            [".rule-card:nth-child(9) p", "text", "可以，我們歡迎毛孩入住。5 公斤以下每隻 200 元，5 公斤以上每隻 300 元。也請主人協助維持環境整潔，讓每位旅人和毛孩都能享受舒適的住宿環境。"],
+            [".rule-card:nth-child(10) h3", "text", "有提供行李載送服務嗎？"],
+            [".rule-card:nth-child(10) p", "text", "有，我們提供行李載送服務。如有需要，請於入住前提前告知，我們會協助安排。"],
+            [".contact-panel > p", "html", "彡禾悅位於小琉球杉福村，<br />坐落在安靜的住宅區小巷弄裡。<br /><br />抵達小琉球後，<br />可依照 Google Maps 導航前往民宿。"],
+            [".footer-contact-item:nth-child(1) span", "text", "聯絡人"],
+            [".footer-contact-item:nth-child(1) strong", "text", "彡禾悅管家"],
+            [".footer-contact-item:nth-child(1) small", "text", "LINE 預約為主"],
+            [".footer-contact-item:nth-child(2) span", "text", "地址"],
+            [".footer-contact-item:nth-child(2) strong", "text", "屏東縣琉球鄉（小琉球）"],
+            [".footer-contact-item:nth-child(2) a", "text", "Google Maps 導航"],
+            [".footer-contact-item:nth-child(3) span", "text", "社群"],
+            [".footer-contact-item:nth-child(3) strong", "text", "Instagram"],
+            [".footer-contact-item:nth-child(4) span", "text", "網站"],
+            [".footer-contact-item:nth-child(4) strong", "text", "彡禾悅官方網站"],
+            [".footer-contact-item:nth-child(4) a", "text", "回到首頁"],
+            [".footer-directory .footer-kicker", "text", "彡禾悅資訊"],
+            [".footer-side-links .footer-kicker", "text", "快速連結"],
+            [".footer-side-links a:nth-of-type(1)", "text", "首頁"],
+            [".footer-side-links a:nth-of-type(2)", "text", "關於民宿"],
+            [".footer-side-links a:nth-of-type(3)", "text", "客房資訊"],
+            [".footer-side-links a:nth-of-type(4)", "text", "預約流程"],
+            [".footer-side-links a:nth-of-type(5)", "text", "聯繫我們"],
+            [".footer-brand", "text", "彡禾悅"],
+            [".footer-social span", "text", "FOLLOW US"],
+            [".footer-policy", "text", "隱私政策"]
+          ]
+        },
+        en: {
+          title: "San He Yue Inn | Xiaoliuqiu Private Villa",
+          htmlLang: "en",
+          toggle: "中文",
+          items: [
+            [".nav-brand-main", "text", "彡禾悅"],
+            [".nav-brand-sub", "text", "SHAN HE YUE"],
+            [".nav-menu-panel a:nth-child(1)", "text", "About"],
+            [".nav-menu-panel a:nth-child(2)", "text", "Spaces"],
+            [".nav-menu-panel a:nth-child(3)", "text", "Rooms"],
+            [".nav-menu-panel a:nth-child(4)", "text", "Booking"],
+            [".nav-menu-panel a:nth-child(5)", "text", "Contact"],
+            [".nav-cta", "text", "LINE"],
+            [".hero-caption", "text", "A traditional courtyard private stay in Xiaoliuqiu"],
+            [".hero-availability", "text", "Check Availability"],
+            [".hero-info-strip", "text", "Private stay for 12–16 guests｜4 rooms｜KTV｜Mahjong｜BBQ"],
+            [".hero .image-story .story-card h2", "text", "The feeling of home does not always have to be at home."],
+            [".hero .image-story .story-card p", "html", "In a restored courtyard house in Xiaoliuqiu,<br />spend a few slow days with family and friends."],
+            [".testimonial:nth-child(1) h3", "text", "A warm private courtyard stay"],
+            [".testimonial:nth-child(1) p:not(.source)", "text", "A warm private courtyard guesthouse with very comfortable beds and an easy-to-use gas barbecue grill. The four rooms are symmetrically arranged, with an electric mahjong table, projector, karaoke, and a welcoming host."],
+            [".testimonial:nth-child(1) .source", "text", "★★★★★ Benson Liu・Google Review"],
+            [".testimonial:nth-child(2) h3", "text", "A comfortable stay for adults and children"],
+            [".testimonial:nth-child(2) p:not(.source)", "text", "Clean, simple, and warm. Both the style of the guesthouse and the host feel friendly. Children can run safely in the front courtyard while adults chat comfortably in the living room. Everything is practical and just right."],
+            [".testimonial:nth-child(2) .source", "text", "★★★★★ Remy HOU・Google Review"],
+            [".testimonial:nth-child(3) h3", "text", "A family trip full of memories"],
+            [".testimonial:nth-child(3) p:not(.source)", "text", "The host was very helpful and assisted us with many things around Xiaoliuqiu. Everyone in our family had a wonderful time, and we left with many beautiful memories. We would love to visit again."],
+            [".testimonial:nth-child(3) .source", "text", "★★★★★ Shu-Chun Hsu・Google Review"],
+            [".about .image-story.reverse .story-card h2", "text", "A courtyard house that carries family memories"],
+            [".about .image-story.reverse .story-card p", "html", "This was once a home where three generations lived together.<br /><br />After renovation,<br />we kept the warmth and memories of the old house<br />while adding modern comfort for your stay.<br /><br />Here, families and friends visiting Xiaoliuqiu<br />can gather freely under one roof."],
+            ["#amenities .section-label", "text", "Amenities"],
+            [".amenity-row:nth-of-type(1) h3", "text", "Gathering & Entertainment"],
+            [".amenity-row:nth-of-type(1) p", "text", "At night, return to the courtyard house and gather in the living room for singing, mahjong, or movies. KTV, an electric mahjong table, projection equipment, and Netflix are ready for your group, extending the fun from daytime into every lively evening."],
+            [".amenity-row:nth-of-type(2) h3", "text", "Island Living"],
+            [".amenity-row:nth-of-type(2) p", "text", "The best part of a private stay is planning every meal freely, just like at home. San He Yue provides a kitchen, refrigerator, water dispenser, washing machine, and outdoor barbecue area. Explore Xiaoliuqiu by day, then come back to cook, barbecue, and chat together."],
+            [".amenity-row:nth-of-type(3) h3", "text", "Pet Friendly"],
+            [".amenity-row:nth-of-type(3) p", "text", "San He Yue also has a lovely little host named Cola. We know pets are family, so travelers are welcome to bring them along to Xiaoliuqiu. Let your pets enjoy the courtyard, sunshine, walks, and holidays with everyone."],
+            ["#rooms .section-label", "text", "Rooms"],
+            [".room-intro", "text", "Our four rooms are named after natural imagery, reflecting the quiet and graceful character of San He Yue. For private stays, families and friends can arrange the rooms freely according to their needs."],
+            [".room-card:nth-child(1) .room-capacity", "text", "4 guests"],
+            [".room-card:nth-child(1) h3", "text", "Ting Feng Quad Room"],
+            [".room-card:nth-child(1) p:last-child", "text", "Relax in a bright, airy room with soft light and generous vertical space."],
+            [".room-card:nth-child(2) .room-capacity", "text", "4 guests"],
+            [".room-card:nth-child(2) h3", "text", "Chen Xi Quad Room"],
+            [".room-card:nth-child(2) p:last-child", "text", "Wake gently with morning light and begin your trip in comfort."],
+            [".room-card:nth-child(3) .room-capacity", "text", "2 guests"],
+            [".room-card:nth-child(3) h3", "text", "Wang Yue Double Room"],
+            [".room-card:nth-child(3) p:last-child", "text", "A calm room in soft ocean tones, perfect for a relaxed getaway for two."],
+            [".room-card:nth-child(4) .room-capacity", "text", "2 guests"],
+            [".room-card:nth-child(4) h3", "text", "Ling Yu Double Room"],
+            [".room-card:nth-child(4) p:last-child", "text", "Warm wood details and simple design create a quiet private retreat."],
+            ["#booking .section-label", "text", "Booking"],
+            ["#booking .wide-title", "text", "Ready to gather in Xiaoliuqiu?"],
+            ["#booking .desc", "html", "After checking availability, please contact us via LINE.<br />We will help confirm your dates and booking details."],
+            [".booking-field:nth-child(1) span", "text", "Check-in"],
+            [".booking-field:nth-child(1) strong", "text", "Select date"],
+            [".booking-field:nth-child(2) span", "text", "Check-out"],
+            [".booking-field:nth-child(2) strong", "text", "Confirm nights"],
+            [".booking-field:nth-child(3) span", "text", "Guests"],
+            [".booking-field:nth-child(3) strong", "text", "12-16 guests"],
+            [".booking-strip button", "text", "Search"],
+            ["#experiences .section-label", "text", "Island Experiences"],
+            ["#experiences .wide-title", "text", "Add-on Experiences for Your Trip"],
+            ["#experiences .desc", "html", "From ferry tickets and scooters to local Xiaoliuqiu experiences,<br />we can help arrange things in advance for an easier trip."],
+            [".experience-card:nth-child(1) h3", "text", "Round-Trip Ferry Tickets"],
+            [".experience-card:nth-child(1) p", "text", "Adult 400 / Child 250"],
+            [".experience-card:nth-child(2) h3", "text", "Scooter Rental"],
+            [".experience-card:nth-child(2) p", "text", "350 / scooter / 24hr"],
+            [".experience-card:nth-child(3) h3", "text", "Intertidal Zone Tour"],
+            [".experience-card:nth-child(3) p", "text", "100 / person"],
+            [".experience-card:nth-child(4) h3", "text", "Night Tour"],
+            [".experience-card:nth-child(4) p", "text", "100 / person"],
+            [".experience-card:nth-child(5) h3", "text", "Snorkeling"],
+            [".experience-card:nth-child(5) p", "text", "400 / person"],
+            [".experience-card:nth-child(6) h3", "text", "All-You-Can-Eat BBQ"],
+            [".experience-card:nth-child(6) p", "text", "Adult 400 / Child 250"],
+            [".experience-card:nth-child(7) h3", "text", "Kayaking"],
+            [".experience-card:nth-child(7) p", "text", "550 / person"],
+            [".experience-card:nth-child(8) h3", "text", "SUP Paddleboarding"],
+            [".experience-card:nth-child(8) p", "text", "900 / person"],
+            [".experience-card:nth-child(9) h3", "text", "Glass-Bottom Boat"],
+            [".experience-card:nth-child(9) p", "text", "Adult 330 / Child 250"],
+            [".experience-card:nth-child(10) h3", "text", "Intro Diving"],
+            [".experience-card:nth-child(10) p", "text", "2200 / one-on-one"],
+            [".experience-card:nth-child(11) h3", "text", "Go-Kart"],
+            [".experience-card:nth-child(11) p", "text", "Single 270 / Double 320"],
+            ["#rules .section-label", "text", "House Rules"],
+            ["#rules .wide-title", "text", "Keep the Good Moments Going"],
+            [".rule-card:nth-child(1) h3", "text", "Check-in / Check-out"],
+            [".rule-card:nth-child(1) p", "text", "Check-in starts at 15:00. Check-out is before 11:00."],
+            [".rule-card:nth-child(2) h3", "text", "Eco-Friendly Stay"],
+            [".rule-card:nth-child(2) p", "text", "Disposable toiletries such as toothbrushes, razors, and shower caps are not provided by default."],
+            [".rule-card:nth-child(3) h3", "text", "Quiet Hours"],
+            [".rule-card:nth-child(3) p", "text", "Please keep the volume down after 22:00. Indoor smoking and fireworks are prohibited."],
+            [".rule-card:nth-child(4) h3", "text", "How many rooms are there?"],
+            [".rule-card:nth-child(4) p", "text", "There are 4 rooms in total: 2 quad rooms and 2 double rooms. The property is rented as a private stay. It is most comfortable for 12 guests and can accommodate up to 16 guests."],
+            [".rule-card:nth-child(5) h3", "text", "Can we barbecue?"],
+            [".rule-card:nth-child(5) p", "text", "Yes. We provide a barbecue area."],
+            [".rule-card:nth-child(6) h3", "text", "Is KTV available?"],
+            [".rule-card:nth-child(6) p", "text", "Yes. We provide mobile KTV with a 55-inch TV and microphones. Guests may use it during their stay and search for their favorite songs."],
+            [".rule-card:nth-child(7) h3", "text", "Are there KTV time limits?"],
+            [".rule-card:nth-child(7) p", "text", "Indoor KTV has no time limit. However, after 22:00, please avoid outdoor noise or music to help maintain neighborhood quiet."],
+            [".rule-card:nth-child(8) h3", "text", "Are disposable amenities provided?"],
+            [".rule-card:nth-child(8) p", "text", "In support of environmental policies, disposable amenities are not provided by default. If you have an urgent need, please let us know and we will assist."],
+            [".rule-card:nth-child(9) h3", "text", "Can we bring pets?"],
+            [".rule-card:nth-child(9) p", "text", "Yes, pets are welcome. Pets under 5 kg are NT$200 each; pets over 5 kg are NT$300 each. Please help keep the environment clean so every traveler and pet can enjoy a comfortable stay."],
+            [".rule-card:nth-child(10) h3", "text", "Is luggage transfer available?"],
+            [".rule-card:nth-child(10) p", "text", "Yes. Luggage transfer service is available. Please let us know before check-in so we can help arrange it."],
+            [".contact-panel > p", "html", "San He Yue is located in Shanfu Village, Xiaoliuqiu,<br />tucked inside a quiet residential lane.<br /><br />After arriving in Xiaoliuqiu,<br />please follow Google Maps navigation to the guesthouse."],
+            [".footer-contact-item:nth-child(1) span", "text", "Contact"],
+            [".footer-contact-item:nth-child(1) strong", "text", "San He Yue Host"],
+            [".footer-contact-item:nth-child(1) small", "text", "LINE booking preferred"],
+            [".footer-contact-item:nth-child(2) span", "text", "Address"],
+            [".footer-contact-item:nth-child(2) strong", "text", "Liuqiu Township, Pingtung County"],
+            [".footer-contact-item:nth-child(2) a", "text", "Open Google Maps"],
+            [".footer-contact-item:nth-child(3) span", "text", "Social"],
+            [".footer-contact-item:nth-child(3) strong", "text", "Instagram"],
+            [".footer-contact-item:nth-child(4) span", "text", "Website"],
+            [".footer-contact-item:nth-child(4) strong", "text", "San He Yue Official Site"],
+            [".footer-contact-item:nth-child(4) a", "text", "Back to Home"],
+            [".footer-directory .footer-kicker", "text", "San He Yue Info"],
+            [".footer-side-links .footer-kicker", "text", "Quick Links"],
+            [".footer-side-links a:nth-of-type(1)", "text", "Home"],
+            [".footer-side-links a:nth-of-type(2)", "text", "About"],
+            [".footer-side-links a:nth-of-type(3)", "text", "Rooms"],
+            [".footer-side-links a:nth-of-type(4)", "text", "Booking"],
+            [".footer-side-links a:nth-of-type(5)", "text", "Contact"],
+            [".footer-brand", "text", "San He Yue"],
+            [".footer-social span", "text", "FOLLOW US"],
+            [".footer-policy", "text", "Privacy Policy"]
+          ]
+        }
+      };
+
+      function applyLanguage(lang) {
+        const pack = i18n[lang] || i18n.zh;
+        document.documentElement.lang = pack.htmlLang;
+        document.title = pack.title;
+        const toggleButton = document.querySelector(".lang-toggle");
+        if (toggleButton) toggleButton.textContent = pack.toggle;
+        pack.items.forEach(([selector, type, value]) => {
+          document.querySelectorAll(selector).forEach((element) => {
+            if (type === "html") {
+              element.innerHTML = value;
+            } else {
+              element.textContent = value;
+            }
+          });
+        });
+        localStorage.setItem("sanheyue-language", lang);
+      }
+
+      const languageToggle = document.querySelector(".lang-toggle");
+      const savedLanguage = languageToggle ? localStorage.getItem("sanheyue-language") || "zh" : "zh";
+      applyLanguage(savedLanguage);
+      if (languageToggle) {
+        languageToggle.addEventListener("click", () => {
+          const currentLanguage = localStorage.getItem("sanheyue-language") || "zh";
+          applyLanguage(currentLanguage === "zh" ? "en" : "zh");
+        });
+      }
+
+      const siteNav = document.querySelector(".nav");
+      function updateNavState() {
+        siteNav.classList.toggle("is-scrolled", window.scrollY > 80);
+      }
+      updateNavState();
+      window.addEventListener("scroll", updateNavState, { passive: true });
+
+      const heroTitle = document.querySelector(".hero-title");
+      const heroParallaxMedia = window.matchMedia("(min-width: 769px)");
+
+      function updateHeroParallax() {
+        if (!heroTitle) return;
+        if (!heroParallaxMedia.matches) {
+          heroTitle.style.setProperty("--hero-parallax-y", "0px");
+          return;
+        }
+
+        const heroRect = heroTitle.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        if (heroRect.bottom < 0 || heroRect.top > viewportHeight) return;
+
+        const scrollRatio = Math.max(-1, Math.min(1, heroRect.top / viewportHeight));
+        const offset = Math.round(scrollRatio * -28);
+        heroTitle.style.setProperty("--hero-parallax-y", `${offset}px`);
+      }
+
+      updateHeroParallax();
+      window.addEventListener("scroll", updateHeroParallax, { passive: true });
+      window.addEventListener("resize", updateHeroParallax);
+      if (heroParallaxMedia.addEventListener) {
+        heroParallaxMedia.addEventListener("change", updateHeroParallax);
+      }
+
+      const bookedDates = new Set([
+        "2026-07-01",
+        "2026-07-04",
+        "2026-07-07",
+        "2026-07-08",
+        "2026-07-10",
+        "2026-07-11",
+        "2026-07-12",
+        "2026-07-13",
+        "2026-07-15",
+        "2026-07-18",
+        "2026-07-20",
+        "2026-07-21",
+        "2026-07-22",
+        "2026-07-24",
+        "2026-07-25",
+        "2026-07-26",
+        "2026-07-27",
+        "2026-07-28",
+        "2026-07-29",
+        "2026-07-31",
+        "2026-08-01",
+        "2026-08-03",
+        "2026-08-04",
+        "2026-08-08",
+        "2026-08-09",
+        "2026-08-10",
+        "2026-08-11",
+        "2026-08-12",
+        "2026-08-13",
+        "2026-08-14",
+        "2026-08-29",
+        "2026-08-30"
+      ]);
+
+      const calendarMonths = [
+        { year: 2026, month: 6, title: "July 2026" },
+        { year: 2026, month: 7, title: "August 2026" }
+      ];
+      let calendarMonthIndex = 0;
+      let selectedAvailabilityDate = "";
+
+      const availabilityModal = document.querySelector("#availability-modal");
+      const availabilityGrid = document.querySelector("[data-availability-grid]");
+      const availabilityTitle = document.querySelector("[data-calendar-title]");
+      const availabilityStatus = document.querySelector("[data-availability-status]");
+      const availabilityLine = document.querySelector("[data-availability-line]");
+
+      function formatDateKey(year, month, day) {
+        return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      }
+
+      function renderAvailabilityCalendar() {
+        const monthData = calendarMonths[calendarMonthIndex];
+        const firstDay = new Date(monthData.year, monthData.month, 1).getDay();
+        const daysInMonth = new Date(monthData.year, monthData.month + 1, 0).getDate();
+        availabilityTitle.textContent = monthData.title;
+        availabilityGrid.innerHTML = "";
+
+        for (let i = 0; i < firstDay; i += 1) {
+          const emptyCell = document.createElement("div");
+          emptyCell.className = "availability-day is-empty";
+          availabilityGrid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const dateKey = formatDateKey(monthData.year, monthData.month, day);
+          const isBooked = bookedDates.has(dateKey);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `availability-day${isBooked ? " is-booked" : ""}${selectedAvailabilityDate === dateKey ? " is-selected" : ""}`;
+          button.disabled = isBooked;
+          button.innerHTML = `<strong>${day}</strong><span>${isBooked ? "已預定" : "可詢問"}</span>`;
+
+          if (!isBooked) {
+            button.addEventListener("click", () => {
+              selectedAvailabilityDate = dateKey;
+              availabilityStatus.textContent = `已選擇 ${dateKey}，可透過 LINE 詢問空房。`;
+              availabilityLine.classList.add("is-active");
+              availabilityLine.href = `https://line.me/R/ti/p/@477rnchd?text=${encodeURIComponent(`您好，我想詢問 ${dateKey} 是否可以入住彡禾悅包棟民宿。`)}`;
+              renderAvailabilityCalendar();
+            });
+          }
+
+          availabilityGrid.appendChild(button);
+        }
+      }
+
+      function openAvailabilityModal(event) {
+        if (event) event.preventDefault();
+        availabilityModal.classList.add("is-open");
+        availabilityModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+        renderAvailabilityCalendar();
+      }
+
+      function closeAvailabilityModal() {
+        availabilityModal.classList.remove("is-open");
+        availabilityModal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+      }
+
+      document.querySelectorAll("[data-availability-open]").forEach((trigger) => {
+        trigger.addEventListener("click", openAvailabilityModal);
+      });
+      document.querySelector("[data-availability-close]").addEventListener("click", closeAvailabilityModal);
+      availabilityModal.addEventListener("click", (event) => {
+        if (event.target === availabilityModal) closeAvailabilityModal();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeAvailabilityModal();
+      });
+      document.querySelector("[data-calendar-prev]").addEventListener("click", () => {
+        calendarMonthIndex = Math.max(0, calendarMonthIndex - 1);
+        renderAvailabilityCalendar();
+      });
+      document.querySelector("[data-calendar-next]").addEventListener("click", () => {
+        calendarMonthIndex = Math.min(calendarMonths.length - 1, calendarMonthIndex + 1);
+        renderAvailabilityCalendar();
+      });
+      renderAvailabilityCalendar();
+    </script>
+  </body>
+</html>
