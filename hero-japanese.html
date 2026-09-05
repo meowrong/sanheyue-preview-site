@@ -5358,47 +5358,21 @@
         });
       }
 
-      const bookedDates = new Set([
-        "2026-07-01",
-        "2026-07-04",
-        "2026-07-07",
-        "2026-07-08",
-        "2026-07-10",
-        "2026-07-11",
-        "2026-07-12",
-        "2026-07-13",
-        "2026-07-15",
-        "2026-07-18",
-        "2026-07-20",
-        "2026-07-21",
-        "2026-07-22",
-        "2026-07-24",
-        "2026-07-25",
-        "2026-07-26",
-        "2026-07-27",
-        "2026-07-28",
-        "2026-07-29",
-        "2026-07-31",
-        "2026-08-01",
-        "2026-08-03",
-        "2026-08-04",
-        "2026-08-08",
-        "2026-08-09",
-        "2026-08-10",
-        "2026-08-11",
-        "2026-08-12",
-        "2026-08-13",
-        "2026-08-14",
-        "2026-08-29",
-        "2026-08-30"
-      ]);
-
-      const calendarMonths = [
-        { year: 2026, month: 6, title: "July 2026" },
-        { year: 2026, month: 7, title: "August 2026" }
-      ];
+      const bookedDates = new Set();
+      const calendarIcsUrl = "sanheyue-booked-dates.ics";
+      const calendarMonths = Array.from({ length: 12 }, (_, index) => {
+        const date = new Date();
+        date.setDate(1);
+        date.setMonth(date.getMonth() + index);
+        return {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          title: date.toLocaleDateString("zh-TW", { year: "numeric", month: "long" })
+        };
+      });
       let calendarMonthIndex = 0;
       let selectedAvailabilityDate = "";
+      let calendarLoaded = false;
 
       const availabilityModal = document.querySelector("#availability-modal");
       const availabilityGrid = document.querySelector("[data-availability-grid]");
@@ -5410,12 +5384,58 @@
         return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
       }
 
+      function parseIcsDate(value) {
+        if (!value) return null;
+        const raw = value.trim();
+        if (/^\d{8}$/.test(raw)) {
+          return new Date(Number(raw.slice(0, 4)), Number(raw.slice(4, 6)) - 1, Number(raw.slice(6, 8)));
+        }
+        if (/^\d{8}T/.test(raw)) {
+          return new Date(Number(raw.slice(0, 4)), Number(raw.slice(4, 6)) - 1, Number(raw.slice(6, 8)));
+        }
+        return null;
+      }
+
+      function addBookedDateRange(startDate, endDate) {
+        if (!startDate) return;
+        const cursor = new Date(startDate);
+        const lastDate = endDate ? new Date(endDate) : new Date(startDate);
+        if (endDate) lastDate.setDate(lastDate.getDate() - 1);
+
+        while (cursor <= lastDate) {
+          bookedDates.add(formatDateKey(cursor.getFullYear(), cursor.getMonth(), cursor.getDate()));
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+
+      async function loadBookedDates() {
+        try {
+          const response = await fetch(`${calendarIcsUrl}?v=${Date.now()}`, { cache: "no-store" });
+          if (!response.ok) throw new Error("Calendar file unavailable");
+          const icsText = await response.text();
+          const events = icsText.split("BEGIN:VEVENT").slice(1);
+          bookedDates.clear();
+          events.forEach((eventText) => {
+            const startMatch = eventText.match(/DTSTART(?:;VALUE=DATE)?:([0-9T]+Z?)/);
+            const endMatch = eventText.match(/DTEND(?:;VALUE=DATE)?:([0-9T]+Z?)/);
+            addBookedDateRange(parseIcsDate(startMatch?.[1]), parseIcsDate(endMatch?.[1]));
+          });
+          calendarLoaded = true;
+        } catch (error) {
+          calendarLoaded = false;
+          console.warn("Unable to load booked dates calendar.", error);
+        }
+      }
+
       function renderAvailabilityCalendar() {
         const monthData = calendarMonths[calendarMonthIndex];
         const firstDay = new Date(monthData.year, monthData.month, 1).getDay();
         const daysInMonth = new Date(monthData.year, monthData.month + 1, 0).getDate();
         availabilityTitle.textContent = monthData.title;
         availabilityGrid.innerHTML = "";
+        if (!calendarLoaded) {
+          availabilityStatus.textContent = "正在同步 Google Calendar 訂房狀態...";
+        }
 
         for (let i = 0; i < firstDay; i += 1) {
           const emptyCell = document.createElement("div");
@@ -5452,6 +5472,7 @@
         availabilityModal.setAttribute("aria-hidden", "false");
         document.body.classList.add("modal-open");
         renderAvailabilityCalendar();
+        loadBookedDates().then(renderAvailabilityCalendar);
       }
 
       function closeAvailabilityModal() {
@@ -5478,7 +5499,7 @@
         calendarMonthIndex = Math.min(calendarMonths.length - 1, calendarMonthIndex + 1);
         renderAvailabilityCalendar();
       });
-      renderAvailabilityCalendar();
+      loadBookedDates().then(renderAvailabilityCalendar);
     </script>
   </body>
 </html>

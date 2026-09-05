@@ -1,0 +1,30 @@
+name: Update booked calendar
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Google Calendar iCal
+        run: |
+          curl -L --fail --retry 3 \
+            "https://calendar.google.com/calendar/ical/ffeb18bc5933f3b545fe2fde2e688e4092cd4854030d0eeee35362f322542e1d%40group.calendar.google.com/public/basic.ics" \
+            -o sanheyue-booked-dates.ics
+          mkdir -p github-pages-upload
+          cp sanheyue-booked-dates.ics github-pages-upload/sanheyue-booked-dates.ics
+
+      - name: Commit updated calendar
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update booked calendar
+          file_pattern: sanheyue-booked-dates.ics github-pages-upload/sanheyue-booked-dates.ics
